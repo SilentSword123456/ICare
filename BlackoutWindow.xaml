@@ -1,0 +1,24 @@
+﻿<Window x:Class="ICare.BlackoutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        WindowStyle="None"
+        WindowState="Maximized"
+        Background="Black"
+        Topmost="True"
+        ShowInTaskbar="False">
+    <Grid>
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock x:Name="MessageText"
+                       Text="Time to rest your eyes"
+                       Foreground="White"
+                       FontSize="36"
+                       HorizontalAlignment="Center"/>
+            <TextBlock x:Name="CountdownText"
+                       Text="20"
+                       Foreground="White"
+                       FontSize="72"
+                       HorizontalAlignment="Center"
+                       Margin="0,20,0,0"/>
+        </StackPanel>
+    </Grid>
+</Window>

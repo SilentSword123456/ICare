@@ -10,7 +10,7 @@ public class Timer
         _config = config;
     }
 
-    public async Task Start(CancellationToken token) {
+    public async Task Start(CancellationToken token, Action triggerBreak) {
         while (!token.IsCancellationRequested) {
             BreakDate = DateTime.Now.AddSeconds(_config.WorkSec);
             SkipNext = false;
@@ -19,7 +19,7 @@ public class Timer
                 //TODO add notification call send
                 await Task.Delay(60 * 1000, token);
                 if (!SkipNext)
-                    ; //TODO trigger blackscreen
+                    triggerBreak();
             }
             catch (TaskCanceledException) {
                 break;
