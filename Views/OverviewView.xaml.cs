@@ -35,6 +35,7 @@ public partial class OverviewView : UserControl
     
         WorkLabel.Text = $"{_config.WorkSec / 60}";
         BreakLabel.Text = $"{_config.BreakSec}";
+        BreakStatMin.Text = $"{_config.BreakStatSec / 60}";
 
         double progress = remaining.TotalSeconds / _config.WorkSec;
         progress = Math.Clamp(progress, 0, 1);

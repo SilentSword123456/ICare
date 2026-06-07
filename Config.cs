@@ -8,6 +8,7 @@ public class Config
     public int WorkSec { get; set; }
     public int BreakSec { get; set; }
     public string Hotkey { get; set; }
+    public int BreakStatSec { get; set; }
 
     private static string ConfigPath => Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
@@ -20,6 +21,7 @@ public class Config
         WorkSec = 20 * 60;
         BreakSec = 20;
         Hotkey = "Shift+Control+Q";
+        BreakStatSec = 0;
         Directory.CreateDirectory(Path.GetDirectoryName(ConfigPath)!);
     }
 
@@ -39,6 +41,7 @@ public class Config
             WorkSec = loaded.WorkSec;
             BreakSec = loaded.BreakSec;
             Hotkey = loaded.Hotkey;
+            BreakSec = loaded.BreakSec;
         }
         catch (FileNotFoundException e)
         {
