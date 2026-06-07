@@ -9,13 +9,18 @@ public class Config
     public int BreakSec { get; set; }
     public string Hotkey { get; set; }
 
-    private const string ConfigPath = "config.json";
+    private static string ConfigPath => Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+        "ICare",
+        "config.json"
+    );
 
     public Config()
     {
         WorkSec = 20 * 60;
         BreakSec = 20;
         Hotkey = "Shift+Control+Q";
+        Directory.CreateDirectory(Path.GetDirectoryName(ConfigPath)!);
     }
 
     public void Save()
