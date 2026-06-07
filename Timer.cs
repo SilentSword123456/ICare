@@ -16,7 +16,7 @@ public class Timer
             SkipNext = false;
             try {
                 await Task.Delay(_config.WorkSec * 1000 - 60 * 1000, token);
-                //TODO add notification call send
+                Notifier.SendWarning();
                 await Task.Delay(60 * 1000, token);
                 if (!SkipNext)
                     triggerBreak();
