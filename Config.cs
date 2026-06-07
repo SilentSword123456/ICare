@@ -13,7 +13,7 @@ public class Config
 
     public Config()
     {
-        WorkSec = 1 * 60;
+        WorkSec = 20 * 60;
         BreakSec = 20;
         Hotkey = "Shift+Control+Q";
     }
