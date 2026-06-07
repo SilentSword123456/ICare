@@ -11,16 +11,21 @@ namespace ICare;
 public partial class App : Application
 {
     private CancellationTokenSource _cts;
+    private Dashboard dashboard;
+    private Config config;
+    private Keyboard keyboard;
+    private BlackoutWindow blackout;
+    private Timer appTimer;
     
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
-        Config config = new Config();
+        config = new Config();
         config.Load();
-        Keyboard keyboard = new Keyboard();
-    
-        var blackout = new BlackoutWindow(config, keyboard);
-        var appTimer = new Timer(config);
+        keyboard = new Keyboard();
+        blackout = new BlackoutWindow(config, keyboard);
+        appTimer = new Timer(config, blackout.TriggerBreak);
+        dashboard = new Dashboard(config, appTimer);
         
         var helperWindow = new Window();
         helperWindow.Width = 0;
@@ -42,7 +47,7 @@ public partial class App : Application
         
         _cts = new CancellationTokenSource();
         
-        var tray = new TrayIcon(_cts);
-        _ = appTimer.Start(_cts.Token, blackout.TriggerBreak);
+        var tray = new TrayIcon(_cts, dashboard);
+        _ = appTimer.Start();
     }
 }

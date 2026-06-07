@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="ICare.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="#F5F0E8">
+    <StackPanel Margin="40">
+        <TextBlock Text="Settings" Foreground="#2D2D2D"
+                   FontSize="22" FontWeight="Bold" Margin="0,0,0,32"/>
+
+        <!-- WORK TIME -->
+        <TextBlock Text="Work duration" Foreground="#8B8B8B" FontSize="12" Margin="0,0,0,6"/>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+            <TextBox x:Name="WorkBox" Style="{StaticResource StyledNumberBox}"
+                     TextChanged="WorkBox_TextChanged"/>
+            <TextBlock Text="minutes" Foreground="#8B8B8B" FontSize="13"
+                       VerticalAlignment="Center" Margin="10,0,0,0"/>
+        </StackPanel>
+
+        <!-- BREAK TIME -->
+        <TextBlock Text="Break duration" Foreground="#8B8B8B" FontSize="12" Margin="0,24,0,6"/>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+            <TextBox x:Name="BreakBox" Style="{StaticResource StyledNumberBox}"
+                     TextChanged="BreakBox_TextChanged"/>
+            <TextBlock Text="seconds" Foreground="#8B8B8B" FontSize="13"
+                       VerticalAlignment="Center" Margin="10,0,0,0"/>
+        </StackPanel>
+
+        <!-- HOTKEY -->
+        <TextBlock Text="Skip hotkey" Foreground="#8B8B8B" FontSize="12" Margin="0,24,0,6"/>
+        <TextBox x:Name="HotkeyBox" Style="{StaticResource StyledNumberBox}"
+                 Width="160" HorizontalContentAlignment="Left"
+                 TextChanged="HotkeyBox_TextChanged"/>
+    </StackPanel>
+</UserControl>
