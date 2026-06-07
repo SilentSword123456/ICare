@@ -20,9 +20,22 @@ jobs:
           dotnet-version: '10.0.x'
 
       - name: Publish
-        run: dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true
+        run: >
+          dotnet publish -c Release
+          -r win-x64
+          --self-contained true
+          -p:PublishSingleFile=true
+          -p:IncludeNativeLibrariesForSelfExtract=true
+          -p:EnableCompressionInSingleFile=true
+          --output publish
 
-      - name: Release
+      - name: Sign
+        shell: pwsh
+        run: |
+          $cert = New-SelfSignedCertificate -Type CodeSigningCert -Subject "CN=ICare" -CertStoreLocation Cert:\CurrentUser\My
+          Set-AuthenticodeSignature -FilePath publish/ICare.exe -Certificate $cert
+
+      - name: Upload Release
         uses: softprops/action-gh-release@v2
         with:
-          files: bin/Release/net10.0-windows10.0.19041.0/win-x64/publish/ICare.exe
+          files: publish/ICare.exe
