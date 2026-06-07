@@ -2,6 +2,7 @@
 using System.Windows.Interop;
 using Microsoft.Toolkit.Uwp.Notifications;
 using Application = System.Windows.Application;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace ICare;
 
@@ -16,9 +17,19 @@ public partial class App : Application
     private Keyboard keyboard;
     private BlackoutWindow blackout;
     private Timer appTimer;
+    private Mutex? _mutex;
     
     protected override void OnStartup(StartupEventArgs e)
     {
+        _mutex = new Mutex(true, "ICare", out bool isNew);
+        if (!isNew)
+        {
+            MessageBox.Show("ICare is already running. Check the system tray.");
+            Shutdown();
+            return;
+        }
+
+        
         base.OnStartup(e);
         config = new Config();
         config.Load();

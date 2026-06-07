@@ -6,9 +6,9 @@ public class Timer
     public bool SkipNext { get; set; } = false;
     public DateTime BreakDate { get; private set; }
     private CancellationTokenSource cts;
-    private Action triggerBreak;
+    private Func<Task> triggerBreak;
 
-    public Timer(Config _config, Action _triggerBreak) {
+    public Timer(Config _config, Func<Task> _triggerBreak) {
         config = _config;
         triggerBreak = _triggerBreak;
         cts = new CancellationTokenSource();
@@ -24,7 +24,7 @@ public class Timer
                 Notifier.SendWarning();
                 await Task.Delay(60 * 1000, token);
                 if (!SkipNext)
-                    triggerBreak();
+                    await triggerBreak();
             }
             catch (TaskCanceledException) {
                 break;

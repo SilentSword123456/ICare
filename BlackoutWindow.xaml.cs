@@ -14,7 +14,7 @@ public partial class BlackoutWindow : Window
         InitializeComponent();
     }
 
-    async public void TriggerBreak()
+    async public Task TriggerBreak()
     {
         keyboard.StartBlocking();
         this.Show();
