@@ -14,9 +14,10 @@ public partial class SettingsView : UserControl
         config = _config;
         restartTimer = _restartTimer;
         InitializeComponent();
-        WorkBox.Text = $"{this.config.WorkSec / 60}";
-        BreakBox.Text = $"{this.config.BreakSec}";
-        HotkeyBox.Text = this.config.Hotkey;
+        WorkBox.Text = $"{config.WorkSec / 60}";
+        BreakBox.Text = $"{config.BreakSec}";
+        HotkeyBox.Text = config.Hotkey;
+        BreakMessage.Text = config.BreakMessage;
     }
 
     private void WorkBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -44,6 +45,12 @@ public partial class SettingsView : UserControl
     private void HotkeyBox_TextChanged(object sender, TextChangedEventArgs e)
     {
         config.Hotkey = HotkeyBox.Text;
+        config.Save();
+    }
+    
+    private void BreakMessage_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        config.BreakMessage = BreakMessage.Text;
         config.Save();
     }
 }

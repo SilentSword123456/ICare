@@ -17,6 +17,8 @@ public partial class BlackoutWindow : Window
     async public Task TriggerBreak()
     {
         keyboard.StartBlocking();
+        config.Load();
+        MessageText.Text = config.BreakMessage;
     
         var windows = System.Windows.Forms.Screen.AllScreens
             .Select(screen => {
@@ -25,6 +27,7 @@ public partial class BlackoutWindow : Window
                 window.Top = screen.Bounds.Top;
                 window.Width = screen.Bounds.Width;
                 window.Height = screen.Bounds.Height;
+                window.MessageText.Text = config.BreakMessage;
                 window.Show();
                 return window;
             }).ToList();

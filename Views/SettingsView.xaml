@@ -28,6 +28,17 @@
         <TextBlock Text="Skip hotkey" Foreground="#8B8B8B" FontSize="12" Margin="0,24,0,6"/>
         <TextBox x:Name="HotkeyBox" Style="{StaticResource StyledNumberBox}"
                  Width="160" HorizontalContentAlignment="Left"
-                 TextChanged="HotkeyBox_TextChanged"/>
-    </StackPanel>
+                 TextChanged="HotkeyBox_TextChanged"/> 
+        
+        <TextBlock Text="Break Message" Foreground="#8B8B8B" FontSize="12" Margin="0,24,0,6"/>
+        <TextBox x:Name="BreakMessage" Style="{StaticResource StyledNumberBox}"
+                 TextChanged="BreakMessage_TextChanged"
+                 Width="160"
+                 MinHeight="40" MaxHeight="300"
+                 TextWrapping="Wrap"
+                 AcceptsReturn="True"
+                 VerticalScrollBarVisibility="Auto"
+                 VerticalContentAlignment="Top"
+                 HorizontalAlignment="Left"/>
+        </StackPanel>
 </UserControl>

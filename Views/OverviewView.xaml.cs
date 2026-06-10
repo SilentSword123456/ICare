@@ -6,18 +6,19 @@ namespace ICare.Views;
 
 public partial class OverviewView : UserControl
 {
-    private Config _config;
-    private Timer _timer;
+    private Config config;
+    private Timer timer;
     private DispatcherTimer _uiTimer;
 
-    public OverviewView(Config config, Timer timer)
+    public OverviewView(Config _config, Timer _timer)
     {
-        _config = config;
-        _timer = timer;
+        config = _config;
+        timer = _timer;
         InitializeComponent();
 
-        WorkLabel.Text = $"{_config.WorkSec / 60}";
-        BreakLabel.Text = $"{_config.BreakSec}";
+        WorkLabel.Text = $"{config.WorkSec / 60}";
+        BreakLabel.Text = $"{config.BreakSec}";
+        BreakStatMin.Text = $"{config.BreakStatSec / 60}";
 
         _uiTimer = new DispatcherTimer();
         _uiTimer.Interval = TimeSpan.FromMilliseconds(100);
@@ -27,17 +28,17 @@ public partial class OverviewView : UserControl
 
     private void UpdateUI()
     {
-        var remaining = _timer.BreakDate - DateTime.Now;
+        var remaining = timer.BreakDate - DateTime.Now;
         if (remaining.TotalSeconds < 0) remaining = TimeSpan.Zero;
 
         CountdownLabel.Text = $"{(int)remaining.TotalMinutes}:{remaining.Seconds:D2}";
-        SkipStatusLabel.Text = _timer.SkipNext ? "Skipped" : "Scheduled";
+        SkipStatusLabel.Text = timer.SkipNext ? "Skipped" : "Scheduled";
     
-        WorkLabel.Text = $"{_config.WorkSec / 60}";
-        BreakLabel.Text = $"{_config.BreakSec}";
-        BreakStatMin.Text = $"{_config.BreakStatSec / 60}";
+        WorkLabel.Text = $"{config.WorkSec / 60}";
+        BreakLabel.Text = $"{config.BreakSec}";
+        BreakStatMin.Text = $"{config.BreakStatSec / 60}";
 
-        double progress = remaining.TotalSeconds / _config.WorkSec;
+        double progress = remaining.TotalSeconds / config.WorkSec;
         progress = Math.Clamp(progress, 0, 1);
         DrawArc(progress);
     }

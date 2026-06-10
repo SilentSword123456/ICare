@@ -9,6 +9,7 @@ public class Config
     public int BreakSec { get; set; }
     public string Hotkey { get; set; }
     public int BreakStatSec { get; set; }
+    public string BreakMessage { get; set; }
 
     private static string ConfigPath => Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
@@ -22,6 +23,7 @@ public class Config
         BreakSec = 20;
         Hotkey = "Shift+Control+Q";
         BreakStatSec = 0;
+        BreakMessage = "Time to rest your eyes";
         Directory.CreateDirectory(Path.GetDirectoryName(ConfigPath)!);
     }
 
@@ -33,33 +35,29 @@ public class Config
 
     public void Load()
     {
-        try
-        {
+        try {
             string data = File.ReadAllText(ConfigPath);
 
             var loaded = JsonSerializer.Deserialize<Config>(data);
             WorkSec = loaded.WorkSec;
             BreakSec = loaded.BreakSec;
             Hotkey = loaded.Hotkey;
-            BreakSec = loaded.BreakSec;
+            BreakStatSec = loaded.BreakStatSec;
+            BreakMessage = loaded.BreakMessage;
         }
-        catch (FileNotFoundException e)
-        {
+        catch (FileNotFoundException e) {
             Console.WriteLine("Config file not found, trying to generate it!");
             Save();
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             Console.WriteLine($"Unexpected error occurred: {e.Message}");
             Console.WriteLine($"Trying to regenerate config file...");
-            try
-            {
+            try {
                 File.Delete(ConfigPath);
                 Save();
                 Console.WriteLine("Config file generated successfully!");
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
                 Console.WriteLine($"Unexpected error occurred while trying to regenerate the file. Copy the following message and report the bug on the GitHub repo:\n{ex.Message}");
             }
         }
