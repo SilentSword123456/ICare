@@ -49,4 +49,8 @@ public class Timer
     public void Stop() {
         cts.Cancel();
     }
+
+    public void SnoozeBreak(int minutes) {
+        BreakDate = DateTime.Now.AddMinutes(minutes);
+    }
 }

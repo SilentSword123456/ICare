@@ -8,10 +8,16 @@ public class Notifier
     {
         new ToastContentBuilder()
             .AddText("ICare")
-            .AddText("You have 1 minute before your break starts.")
+            .AddText("You have 1 minute until your break.")
             .AddButton(new ToastButton()
                 .SetContent("Skip")
                 .AddArgument("action", "skip"))
+            .AddButton(new ToastButton()
+                .SetContent("Snooze 5 min")
+                .AddArgument("action", "snooze5"))
+            .AddButton(new ToastButton()
+                .SetContent("Snooze 10 min")
+                .AddArgument("action", "snooze10"))
             .Show();
     }
 }

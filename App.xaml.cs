@@ -52,8 +52,19 @@ public partial class App : Application
         
         ToastNotificationManagerCompat.OnActivated += args =>
         {
-            if (args.Argument.Contains("skip"))
-                appTimer.SkipNextBreak();
+            var toastArgs = ToastArguments.Parse(args.Argument);
+            switch (toastArgs["action"])
+            {
+                case "skip":
+                    appTimer.SkipNextBreak();
+                    break;
+                case "snooze5":
+                    appTimer.SnoozeBreak(5);
+                    break;
+                case "snooze10":
+                    appTimer.SnoozeBreak(10);
+                    break;
+            }
         };
         
         _cts = new CancellationTokenSource();
