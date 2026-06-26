@@ -51,6 +51,6 @@ public class Timer
     }
 
     public void SnoozeBreak(int minutes) {
-        BreakDate = DateTime.Now.AddMinutes(minutes);
+        BreakDate = BreakDate.AddMinutes(minutes);
     }
 }
