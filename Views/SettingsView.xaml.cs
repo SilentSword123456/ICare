@@ -8,15 +8,17 @@ public partial class SettingsView : UserControl
 {
     private Config config;
     private Action restartTimer;
+    private Action reloadHotkey;
 
-    public SettingsView(Config _config, Action _restartTimer)
+    public SettingsView(Config _config, Action _restartTimer, Action _reloadHotkey)
     {
         config = _config;
         restartTimer = _restartTimer;
+        reloadHotkey =  _reloadHotkey;
         InitializeComponent();
         WorkBox.Text = $"{config.WorkSec / 60}";
         BreakBox.Text = $"{config.BreakSec}";
-        HotkeyBox.Text = config.Hotkey;
+        HotkeyBox.Text = System.Windows.Input.KeyInterop.KeyFromVirtualKey((int)config.HotkeyVK).ToString();
         BreakMessage.Text = config.BreakMessage;
     }
 
@@ -42,10 +44,17 @@ public partial class SettingsView : UserControl
         }
     }
 
-    private void HotkeyBox_TextChanged(object sender, TextChangedEventArgs e)
+    private void HotkeyBox_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
     {
-        config.Hotkey = HotkeyBox.Text;
+        e.Handled = true;
+        var key = e.Key;
+        if (key < System.Windows.Input.Key.A || key > System.Windows.Input.Key.Z)
+            return;
+
+        config.HotkeyVK = (uint)System.Windows.Input.KeyInterop.VirtualKeyFromKey(key);
+        HotkeyBox.Text = key.ToString();
         config.Save();
+        reloadHotkey();
     }
     
     private void BreakMessage_TextChanged(object sender, TextChangedEventArgs e)

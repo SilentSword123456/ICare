@@ -33,10 +33,10 @@ public partial class App : Application
         base.OnStartup(e);
         config = new Config();
         config.Load();
-        keyboard = new Keyboard();
+        keyboard = new Keyboard(config);
         blackout = new BlackoutWindow(config, keyboard);
         appTimer = new Timer(config, blackout.TriggerBreak);
-        dashboard = new Dashboard(config, appTimer);
+        dashboard = new Dashboard(config, appTimer, keyboard);
         
         var helperWindow = new Window();
         helperWindow.Width = 0;

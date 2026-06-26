@@ -7,11 +7,13 @@ public partial class Dashboard : Window
 {
     private Config config;
     private Timer timer;
+    private Keyboard keyboard;
 
-    public Dashboard(Config config, Timer timer)
+    public Dashboard(Config config, Timer timer, Keyboard keyboard)
     {
         this.config = config;
         this.timer = timer;
+        this.keyboard = keyboard;
         InitializeComponent();
         ContentArea.Content = new OverviewView(this.config, this.timer);
     }
@@ -34,7 +36,7 @@ public partial class Dashboard : Window
 
     private void NavSettings_Click(object sender, RoutedEventArgs e)
     {
-        NavigateTo(new SettingsView(config, timer.Restart));
+        NavigateTo(new SettingsView(config, timer.Restart, keyboard.ReloadHotkey));
         NavSettings.Style = (Style)FindResource("NavButtonActive");
         NavOverview.Style = (Style)FindResource("NavButton");
     }

@@ -34,7 +34,7 @@ public partial class BlackoutWindow : Window
 
         var endBreakTime = DateTime.Now.AddSeconds(config.BreakSec);
         while (DateTime.Now < endBreakTime) {
-            var remaining = ((int)(endBreakTime - DateTime.Now).TotalSeconds).ToString();
+            var remaining = ((int)(endBreakTime - DateTime.Now).TotalSeconds + 1).ToString();
             foreach (var window in windows)
                 window.CountdownText.Text = remaining;
             

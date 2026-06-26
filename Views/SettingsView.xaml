@@ -6,7 +6,6 @@
         <TextBlock Text="Settings" Foreground="#2D2D2D"
                    FontSize="22" FontWeight="Bold" Margin="0,0,0,32"/>
 
-        <!-- WORK TIME -->
         <TextBlock Text="Work duration" Foreground="#8B8B8B" FontSize="12" Margin="0,0,0,6"/>
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
             <TextBox x:Name="WorkBox" Style="{StaticResource StyledNumberBox}"
@@ -15,7 +14,6 @@
                        VerticalAlignment="Center" Margin="10,0,0,0"/>
         </StackPanel>
 
-        <!-- BREAK TIME -->
         <TextBlock Text="Break duration" Foreground="#8B8B8B" FontSize="12" Margin="0,24,0,6"/>
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
             <TextBox x:Name="BreakBox" Style="{StaticResource StyledNumberBox}"
@@ -24,11 +22,24 @@
                        VerticalAlignment="Center" Margin="10,0,0,0"/>
         </StackPanel>
 
-        <!-- HOTKEY -->
         <TextBlock Text="Skip hotkey" Foreground="#8B8B8B" FontSize="12" Margin="0,24,0,6"/>
-        <TextBox x:Name="HotkeyBox" Style="{StaticResource StyledNumberBox}"
-                 Width="160" HorizontalContentAlignment="Left"
-                 TextChanged="HotkeyBox_TextChanged"/> 
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+            <Border Background="#E8E3DB" BorderBrush="#C0BAB0" BorderThickness="1" 
+                    CornerRadius="10" Padding="6,10">
+                <TextBlock Text="Ctrl" Foreground="#2D2D2D" FontSize="12" FontWeight="SemiBold"/>
+            </Border>
+            <TextBlock Text="+" Foreground="#8B8B8B" FontSize="13" VerticalAlignment="Center" Margin="4,0"/>
+            <Border Background="#E8E3DB" BorderBrush="#C0BAB0" BorderThickness="1"
+                    CornerRadius="10" Padding="6,10">
+                <TextBlock Text="Shift" Foreground="#2D2D2D" FontSize="12" FontWeight="SemiBold"/>
+            </Border>
+            <TextBlock Text="+" Foreground="#8B8B8B" FontSize="13" VerticalAlignment="Center" Margin="4,0"/>
+            <Border BorderBrush="#2D2D2D" BorderThickness="1" CornerRadius="6">
+                <TextBox x:Name="HotkeyBox" Style="{StaticResource StyledNumberBox}"
+                         Width="50" HorizontalContentAlignment="Center"
+                         PreviewKeyDown="HotkeyBox_PreviewKeyDown"/>
+            </Border>
+        </StackPanel>
         
         <TextBlock Text="Break Message" Foreground="#8B8B8B" FontSize="12" Margin="0,24,0,6"/>
         <TextBox x:Name="BreakMessage" Style="{StaticResource StyledNumberBox}"

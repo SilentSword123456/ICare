@@ -29,40 +29,45 @@ public class Keyboard : IDisposable
     private const int HOTKEY_ID = 1;
     private const uint MOD_SHIFT = 0x0004;
     private const uint MOD_CONTROL = 0x0002;
-    private const uint VK_Q = 0x51;
+    private uint VK_Q = 0x51;
 
     private IntPtr _hookId = IntPtr.Zero;
     private IntPtr _windowHandle;
     private LowLevelKeyboardProc _proc;
     private Action _onSkip;
     private bool _blockInput = false;
+    private Config config;
 
-    public Keyboard()
-    {
+    public Keyboard(Config _config) {
         _proc = HookCallback;
         using var curProcess = Process.GetCurrentProcess();
         using var curModule = curProcess.MainModule!;
         _hookId = SetWindowsHookEx(13, _proc, GetModuleHandle(curModule.ModuleName!), 0);
+        config = _config;
+        VK_Q = config.HotkeyVK;
     }
 
     public void StartBlocking() => _blockInput = true;
     public void StopBlocking() => _blockInput = false;
 
-    public void RegisterSkipHotkey(IntPtr windowHandle, Action onSkip)
-    {
+    public void RegisterSkipHotkey(IntPtr windowHandle, Action onSkip) {
         _windowHandle = windowHandle;
         _onSkip = onSkip;
         RegisterHotKey(windowHandle, HOTKEY_ID, MOD_CONTROL | MOD_SHIFT, VK_Q);
     }
 
-    public void StartListening(IntPtr handle)
-    {
+    public void StartListening(IntPtr handle) {
         var source = HwndSource.FromHwnd(handle);
         source.AddHook(WndProc);
     }
 
-    private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
-    {
+    public void ReloadHotkey() {
+        UnregisterHotKey(_windowHandle, HOTKEY_ID);
+        VK_Q = config.HotkeyVK;
+        RegisterHotKey(_windowHandle, HOTKEY_ID, MOD_CONTROL | MOD_SHIFT, VK_Q);
+    }
+
+    private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled) {
         const int WM_HOTKEY = 0x0312;
         if (msg == WM_HOTKEY && wParam.ToInt32() == HOTKEY_ID)
         {
@@ -72,16 +77,14 @@ public class Keyboard : IDisposable
         return IntPtr.Zero;
     }
 
-    private IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
-    {
+    private IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam) {
         if (nCode >= 0 && _blockInput)
             return (IntPtr)1;
 
         return CallNextHookEx(_hookId, nCode, wParam, lParam);
     }
 
-    public void Dispose()
-    {
+    public void Dispose() {
         UnhookWindowsHookEx(_hookId);
         UnregisterHotKey(_windowHandle, HOTKEY_ID);
     }

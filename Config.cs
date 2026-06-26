@@ -7,7 +7,7 @@ public class Config
 {
     public int WorkSec { get; set; }
     public int BreakSec { get; set; }
-    public string Hotkey { get; set; }
+    public uint HotkeyVK { get; set; }
     public int BreakStatSec { get; set; }
     public string BreakMessage { get; set; }
 
@@ -21,7 +21,7 @@ public class Config
     {
         WorkSec = 20 * 60;
         BreakSec = 20;
-        Hotkey = "Shift+Control+Q";
+        HotkeyVK = 0x51;
         BreakStatSec = 0;
         BreakMessage = "Time to rest your eyes";
         Directory.CreateDirectory(Path.GetDirectoryName(ConfigPath)!);
@@ -41,7 +41,7 @@ public class Config
             var loaded = JsonSerializer.Deserialize<Config>(data);
             WorkSec = loaded.WorkSec;
             BreakSec = loaded.BreakSec;
-            Hotkey = loaded.Hotkey;
+            HotkeyVK = loaded.HotkeyVK;
             BreakStatSec = loaded.BreakStatSec;
             BreakMessage = loaded.BreakMessage;
         }
