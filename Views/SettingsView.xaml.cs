@@ -30,7 +30,6 @@ public partial class SettingsView : UserControl
             if (config.WorkSec == newSec) 
                 return;
             config.WorkSec = newSec;
-            config.Save();
             restartTimer();
         }
     }
@@ -40,7 +39,6 @@ public partial class SettingsView : UserControl
         if (int.TryParse(BreakBox.Text, out int val) && val > 0)
         {
             config.BreakSec = val;
-            config.Save();
         }
     }
 
@@ -53,13 +51,11 @@ public partial class SettingsView : UserControl
 
         config.HotkeyVK = (uint)System.Windows.Input.KeyInterop.VirtualKeyFromKey(key);
         HotkeyBox.Text = key.ToString();
-        config.Save();
         reloadHotkey();
     }
     
     private void BreakMessage_TextChanged(object sender, TextChangedEventArgs e)
     {
         config.BreakMessage = BreakMessage.Text;
-        config.Save();
     }
 }

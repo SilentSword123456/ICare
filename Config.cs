@@ -5,11 +5,42 @@ namespace ICare;
 
 public class Config
 {
-    public int WorkSec { get; set; }
-    public int BreakSec { get; set; }
-    public uint HotkeyVK { get; set; }
-    public int BreakStatSec { get; set; }
-    public string BreakMessage { get; set; }
+    private int _workSec;
+    public int WorkSec
+    {
+        get => _workSec;
+        set { _workSec = value; Save(); }
+    }
+    private int _breakSec;
+    public int BreakSec
+    {
+        get => _breakSec;
+        set { _breakSec = value; Save(); }
+    }
+    private uint _hotkeyVk;
+    public uint HotkeyVK
+    {
+        get => _hotkeyVk;
+        set { _hotkeyVk = value; Save(); }
+    }
+    private int _breakStatSec;
+    public int BreakStatSec
+    {
+        get => _breakStatSec;
+        set { _breakStatSec = value; Save(); }
+    }
+    private string _breakMessage;
+    public string BreakMessage
+    {
+        get => _breakMessage;
+        set { _breakMessage = value; Save(); }
+    }
+    private int _timesSkipped;
+    public int TimesSkipped
+    {
+        get => _timesSkipped;
+        set { _timesSkipped = value; Save(); }
+    }
 
     private static string ConfigPath => Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
@@ -19,11 +50,12 @@ public class Config
 
     public Config()
     {
-        WorkSec = 20 * 60;
-        BreakSec = 20;
-        HotkeyVK = 0x51;
-        BreakStatSec = 0;
-        BreakMessage = "Time to rest your eyes";
+        _workSec = 20 * 60;
+        _breakSec = 20;
+        _hotkeyVk = 0x51;
+        _breakStatSec = 0;
+        _breakMessage = "Time to rest your eyes";
+        _timesSkipped = 0;
         Directory.CreateDirectory(Path.GetDirectoryName(ConfigPath)!);
     }
 
@@ -39,11 +71,12 @@ public class Config
             string data = File.ReadAllText(ConfigPath);
 
             var loaded = JsonSerializer.Deserialize<Config>(data);
-            WorkSec = loaded.WorkSec;
-            BreakSec = loaded.BreakSec;
-            HotkeyVK = loaded.HotkeyVK;
-            BreakStatSec = loaded.BreakStatSec;
-            BreakMessage = loaded.BreakMessage;
+            _workSec = loaded.WorkSec;
+            _breakSec = loaded.BreakSec;
+            _hotkeyVk = loaded.HotkeyVK;
+            _breakStatSec = loaded.BreakStatSec;
+            _breakMessage = loaded.BreakMessage;
+            _timesSkipped = loaded.TimesSkipped;
         }
         catch (FileNotFoundException e) {
             Console.WriteLine("Config file not found, trying to generate it!");

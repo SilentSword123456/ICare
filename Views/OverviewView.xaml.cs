@@ -32,8 +32,18 @@ public partial class OverviewView : UserControl
         if (remaining.TotalSeconds < 0) remaining = TimeSpan.Zero;
 
         CountdownLabel.Text = $"{(int)remaining.TotalMinutes}:{remaining.Seconds:D2}";
-        SkipStatusLabel.Text = timer.SkipNext ? "Skipped" : "Scheduled";
-    
+        if (timer.SkipNext == true)
+        {
+            SkipStatusLabel.Text = "Skipped";
+            SkipStatusLabel.Foreground = new SolidColorBrush(Colors.DarkRed);
+            TimerArc.Stroke  = new SolidColorBrush(Colors.DarkRed);
+        }
+        else {
+            SkipStatusLabel.Text = "Scheduled";
+            SkipStatusLabel.Foreground = new SolidColorBrush(Colors.DimGray);
+            TimerArc.Stroke  = new SolidColorBrush(Colors.DarkGreen);
+        }
+
         WorkLabel.Text = $"{config.WorkSec / 60}";
         BreakLabel.Text = $"{config.BreakSec}";
         BreakStatMin.Text = $"{config.BreakStatSec / 60}";

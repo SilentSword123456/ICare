@@ -47,13 +47,13 @@ public partial class App : Application
         helperWindow.Hide();
 
         var handle = new WindowInteropHelper(helperWindow).Handle;
-        keyboard.RegisterSkipHotkey(handle, () => appTimer.SkipNext = true);
+        keyboard.RegisterSkipHotkey(handle, appTimer.SkipNextBreak);
         keyboard.StartListening(handle);
         
         ToastNotificationManagerCompat.OnActivated += args =>
         {
             if (args.Argument.Contains("skip"))
-                appTimer.SkipNext = true;
+                appTimer.SkipNextBreak();
         };
         
         _cts = new CancellationTokenSource();

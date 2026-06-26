@@ -37,6 +37,14 @@ public class Timer
         cts = new CancellationTokenSource();
         _ = Start();
     }
+    
+    public void SkipNextBreak()
+    {
+        if (SkipNext == true)
+            return;
+        SkipNext = true;
+        config.TimesSkipped++;
+    }
 
     public void Stop() {
         cts.Cancel();

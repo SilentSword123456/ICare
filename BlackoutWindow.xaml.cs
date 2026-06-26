@@ -46,6 +46,5 @@ public partial class BlackoutWindow : Window
         
         keyboard.StopBlocking();
         config.BreakStatSec += config.BreakSec;
-        config.Save();
     }
 }
