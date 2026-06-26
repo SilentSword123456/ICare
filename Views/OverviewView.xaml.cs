@@ -19,6 +19,7 @@ public partial class OverviewView : UserControl
         WorkLabel.Text = $"{config.WorkSec / 60}";
         BreakLabel.Text = $"{config.BreakSec}";
         BreakStatMin.Text = $"{config.BreakStatSec / 60}";
+        TimesSkipped.Text = $"{config.TimesSkipped}";
 
         _uiTimer = new DispatcherTimer();
         _uiTimer.Interval = TimeSpan.FromMilliseconds(100);
@@ -47,6 +48,7 @@ public partial class OverviewView : UserControl
         WorkLabel.Text = $"{config.WorkSec / 60}";
         BreakLabel.Text = $"{config.BreakSec}";
         BreakStatMin.Text = $"{config.BreakStatSec / 60}";
+        TimesSkipped.Text = $"{config.TimesSkipped}";
 
         double progress = remaining.TotalSeconds / config.WorkSec;
         progress = Math.Clamp(progress, 0, 1);
