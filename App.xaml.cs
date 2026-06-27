@@ -71,5 +71,6 @@ public partial class App : Application
         
         var tray = new TrayIcon(_cts, dashboard);
         _ = appTimer.Start();
+        dashboard.Open();
     }
 }

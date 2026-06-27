@@ -20,7 +20,10 @@ public class TrayIcon : IDisposable
 
         var menu = new ContextMenuStrip();
         menu.Items.Add("Quit", null, (s, e) => { CloseApp(); });
-        trayIcon.DoubleClick += (s, e) => OpenDashboard();
+        trayIcon.MouseClick += (s, e) => {
+            if (e.Button == MouseButtons.Left)
+                dashboard.Open();
+        };
         trayIcon.Text = AppInfo.Name;
         trayIcon.ContextMenuStrip = menu;
     }
@@ -31,14 +34,6 @@ public class TrayIcon : IDisposable
         System.Windows.Application.Current.Dispatcher.Invoke(() => {
             System.Windows.Application.Current.Shutdown();
         });
-    }
-
-    private void OpenDashboard()
-    {
-        if (dashboard.IsVisible)
-            dashboard.Activate();
-        else
-            dashboard.Show();
     }
 
     public void Dispose()

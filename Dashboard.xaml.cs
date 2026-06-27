@@ -47,5 +47,12 @@ public partial class Dashboard : Window
         Hide();
     }
     
+    public void Open()
+    {
+        if (IsVisible)
+            Activate();
+        else
+            Show();
+    }
     
 }
