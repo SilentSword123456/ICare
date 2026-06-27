@@ -7,7 +7,7 @@ public class Notifier
     public static void SendWarning()
     {
         new ToastContentBuilder()
-            .AddText("ICare")
+            .AddText(AppInfo.Name)
             .AddText("You have 1 minute until your break.")
             .AddButton(new ToastButton()
                 .SetContent("Skip")

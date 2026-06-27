@@ -13,6 +13,10 @@
         <RuntimeIdentifier>win-x64</RuntimeIdentifier>
         <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
         <ApplicationIcon>eye.ico</ApplicationIcon>
+
+        <AssemblyTitle>ICare</AssemblyTitle>
+        <Product>ICare</Product>
+        <Company>SilentLab</Company>
     </PropertyGroup>
 
     <ItemGroup>

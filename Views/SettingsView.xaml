@@ -41,6 +41,14 @@
             </Border>
         </StackPanel>
         
+        <TextBlock Text="Start automatically" Foreground="#8B8B8B" FontSize="12" Margin="0,24,0,6"/>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+            <ToggleButton x:Name="AutoStartToggle"
+                          Checked="AutoStartToggle_Checked"
+                          Unchecked="AutoStartToggle_Unchecked"/> <!-- TODO: make it be a closed/opened eye instead of a simple toggle -->
+        </StackPanel>
+
+        
         <TextBlock Text="Break Message" Foreground="#8B8B8B" FontSize="12" Margin="0,24,0,6"/>
         <TextBox x:Name="BreakMessage" Style="{StaticResource StyledNumberBox}"
                  TextChanged="BreakMessage_TextChanged"

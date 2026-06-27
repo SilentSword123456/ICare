@@ -21,10 +21,10 @@ public partial class App : Application
     
     protected override void OnStartup(StartupEventArgs e)
     {
-        _mutex = new Mutex(true, "ICare", out bool isNew);
+        _mutex = new Mutex(true, AppInfo.Name, out bool isNew);
         if (!isNew)
         {
-            MessageBox.Show("ICare is already running. Check the system tray.");
+            MessageBox.Show($"{AppInfo.Name} is already running. Check the system tray.");
             Shutdown();
             return;
         }

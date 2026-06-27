@@ -44,7 +44,7 @@ public class Config
 
     private static string ConfigPath => Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-        "ICare",
+        AppInfo.Name,
         "config.json"
     );
 

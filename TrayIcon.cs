@@ -16,12 +16,12 @@ public class TrayIcon : IDisposable
             .GetManifestResourceStream("ICare.eye.ico");
         trayIcon.Icon = new System.Drawing.Icon(stream!);
         trayIcon.Visible = true;
-        trayIcon.Text = "ICare";
+        trayIcon.Text = AppInfo.Name;
 
         var menu = new ContextMenuStrip();
         menu.Items.Add("Quit", null, (s, e) => { CloseApp(); });
         trayIcon.DoubleClick += (s, e) => OpenDashboard();
-        trayIcon.Text = "ICare";
+        trayIcon.Text = AppInfo.Name;
         trayIcon.ContextMenuStrip = menu;
     }
 

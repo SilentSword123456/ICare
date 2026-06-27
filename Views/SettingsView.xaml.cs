@@ -19,6 +19,7 @@ public partial class SettingsView : UserControl
         WorkBox.Text = $"{config.WorkSec / 60}";
         BreakBox.Text = $"{config.BreakSec}";
         HotkeyBox.Text = System.Windows.Input.KeyInterop.KeyFromVirtualKey((int)config.HotkeyVK).ToString();
+        AutoStartToggle.IsChecked = StartupManager.IsEnabled();
         BreakMessage.Text = config.BreakMessage;
     }
 
@@ -57,5 +58,15 @@ public partial class SettingsView : UserControl
     private void BreakMessage_TextChanged(object sender, TextChangedEventArgs e)
     {
         config.BreakMessage = BreakMessage.Text;
+    }
+    
+    private void AutoStartToggle_Checked(object sender, RoutedEventArgs e)
+    {
+        StartupManager.Enable();
+    }
+
+    private void AutoStartToggle_Unchecked(object sender, RoutedEventArgs e)
+    {
+        StartupManager.Disable();
     }
 }
