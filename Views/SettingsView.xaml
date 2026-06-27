@@ -44,6 +44,7 @@
         <TextBlock Text="Start automatically" Foreground="#8B8B8B" FontSize="12" Margin="0,24,0,6"/>
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
             <ToggleButton x:Name="AutoStartToggle"
+                          Style="{StaticResource PillToggleButton}"
                           Checked="AutoStartToggle_Checked"
                           Unchecked="AutoStartToggle_Unchecked"/> <!-- TODO: make it be a closed/opened eye instead of a simple toggle -->
         </StackPanel>
