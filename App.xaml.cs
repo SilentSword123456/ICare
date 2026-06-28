@@ -24,7 +24,7 @@ public partial class App : Application
         _mutex = new Mutex(true, AppInfo.Name, out bool isNew);
         if (!isNew)
         {
-            MessageBox.Show($"{AppInfo.Name} is already running. Check the system tray.TESTTESTTEST");
+            MessageBox.Show($"{AppInfo.Name} is already running. Check the system tray.");
             Shutdown();
             return;
         }
