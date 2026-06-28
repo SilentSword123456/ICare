@@ -18,6 +18,7 @@ public partial class SettingsView : UserControl
         InitializeComponent();
         WorkBox.Text = $"{config.WorkSec / 60}";
         BreakBox.Text = $"{config.BreakSec}";
+        RecalculateWarningIcon();
         HotkeyBox.Text = System.Windows.Input.KeyInterop.KeyFromVirtualKey((int)config.HotkeyVK).ToString();
         AutoStartToggle.IsChecked = StartupManager.IsEnabled();
         BreakMessage.Text = config.BreakMessage;
@@ -32,6 +33,7 @@ public partial class SettingsView : UserControl
                 return;
             config.WorkSec = newSec;
             restartTimer();
+            RecalculateWarningIcon();
         }
     }
 
@@ -40,6 +42,7 @@ public partial class SettingsView : UserControl
         if (int.TryParse(BreakBox.Text, out int val) && val > 0)
         {
             config.BreakSec = val;
+            RecalculateWarningIcon();
         }
     }
 
@@ -68,5 +71,10 @@ public partial class SettingsView : UserControl
     private void AutoStartToggle_Unchecked(object sender, RoutedEventArgs e)
     {
         StartupManager.Disable();
+    }
+    
+    private void RecalculateWarningIcon()
+    {
+        BreakWarningIcon.Visibility = config.WorkSec/60 <= config.BreakSec ? Visibility.Collapsed : Visibility.Visible;
     }
 }
