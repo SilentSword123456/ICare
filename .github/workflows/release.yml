@@ -40,6 +40,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: publish/ICare.exe
+          body: "New release"
 
       - name: VirusTotal Scan
         uses: cssnr/virustotal-action@v2
