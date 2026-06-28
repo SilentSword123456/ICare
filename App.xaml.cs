@@ -29,7 +29,6 @@ public partial class App : Application
             return;
         }
 
-        //Testing
         base.OnStartup(e);
         config = new Config();
         config.Load();
