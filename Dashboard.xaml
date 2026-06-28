@@ -5,7 +5,7 @@
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{materialDesign:MaterialDesignFont}"
-        Title="ICare" Height="500" Width="750"
+        Title="ICare" Height="600" Width="850"
         WindowStyle="SingleBorderWindow"
         Icon="pack://application:,,,/eye.ico">
     <Grid>

@@ -14,6 +14,7 @@ public partial class Dashboard : Window
         this.config = config;
         this.timer = timer;
         this.keyboard = keyboard;
+        Title = AppInfo.Name;
         InitializeComponent();
         ContentArea.Content = new OverviewView(this.config, this.timer);
     }
