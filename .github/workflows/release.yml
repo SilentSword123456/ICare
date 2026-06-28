@@ -1,24 +1,21 @@
 name: Build & Release
-
 on:
   push:
     tags:
       - 'v*'
-
 jobs:
   build:
     runs-on: windows-latest
     permissions:
       contents: write
-
+      id-token: write
+      attestations: write
     steps:
       - uses: actions/checkout@v4
-
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'
-
       - name: Publish
         run: >
           dotnet publish -c Release
@@ -28,13 +25,15 @@ jobs:
           -p:IncludeNativeLibrariesForSelfExtract=true
           -p:EnableCompressionInSingleFile=true
           --output publish
-
       - name: Sign
         shell: pwsh
         run: |
           $cert = New-SelfSignedCertificate -Type CodeSigningCert -Subject "CN=ICare" -CertStoreLocation Cert:\CurrentUser\My
           Set-AuthenticodeSignature -FilePath publish/ICare.exe -Certificate $cert
-
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: publish/ICare.exe
       - name: Upload Release
         uses: softprops/action-gh-release@v2
         with:
