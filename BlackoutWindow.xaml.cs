@@ -27,7 +27,8 @@ public partial class BlackoutWindow : Window
                 window.Top = screen.Bounds.Top;
                 window.Width = screen.Bounds.Width;
                 window.Height = screen.Bounds.Height;
-                window.MessageText.Text = config.BreakMessage;
+                window.MessageText.Text = screen.Primary ? config.BreakMessage : "";
+                window.CountdownText.Text = "";
                 window.Show();
                 return window;
             }).ToList();
@@ -35,14 +36,14 @@ public partial class BlackoutWindow : Window
         var endBreakTime = DateTime.Now.AddSeconds(config.BreakSec);
         while (DateTime.Now < endBreakTime) {
             var remaining = ((int)(endBreakTime - DateTime.Now).TotalSeconds + 1).ToString();
-            foreach (var window in windows)
-                window.CountdownText.Text = remaining;
+            
+            windows[0].CountdownText.Text = remaining;
             
             await Task.Delay(1000);
         }
 
-        foreach (var w in windows)
-            w.Hide();
+        foreach (var window in windows)
+            window.Hide();
         
         keyboard.StopBlocking();
         config.BreakStatSec += config.BreakSec;
