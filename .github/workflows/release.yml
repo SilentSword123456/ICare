@@ -20,33 +20,9 @@ jobs:
           dotnet-version: '10.0.x'
 
       - name: Publish
-        run: >
-          dotnet publish -c Release
-          -r win-x64
-          --self-contained true
-          -p:PublishSingleFile=true
-          -p:IncludeNativeLibrariesForSelfExtract=true
-          -p:EnableCompressionInSingleFile=true
-          --output publish
+        run: dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true
 
-      - name: Sign
-        shell: pwsh
-        run: |
-          $cert = New-SelfSignedCertificate -Type CodeSigningCert -Subject "CN=ICare" -CertStoreLocation Cert:\CurrentUser\My
-          Set-AuthenticodeSignature -FilePath publish/ICare.exe -Certificate $cert
-
-      - name: Upload Release
-        id: release
+      - name: Release
         uses: softprops/action-gh-release@v2
         with:
-          files: publish/ICare.exe
-          body: "New release"
-
-      - name: VirusTotal Scan
-        uses: cssnr/virustotal-action@v2
-        with:
-          vt_api_key: ${{ secrets.VT_API_KEY }}
-          update_release: true
-          release_heading: '**VirusTotal Results**'
-          summary: true
-          release_id: ${{ steps.release.outputs.id }}
+          files: bin/Release/net10.0-windows10.0.19041.0/win-x64/publish/ICare.exe
