@@ -36,6 +36,7 @@ jobs:
           Set-AuthenticodeSignature -FilePath publish/ICare.exe -Certificate $cert
 
       - name: Upload Release
+        id: release
         uses: softprops/action-gh-release@v2
         with:
           files: publish/ICare.exe
@@ -47,3 +48,4 @@ jobs:
           update_release: true
           release_heading: '**VirusTotal Results:**'
           summary: true
+          release_id: ${{ steps.release.outputs.id }}
