@@ -50,7 +50,7 @@ public partial class OverviewView : UserControl
         BreakStatMin.Text = $"{config.BreakStatSec / 60}";
         TimesSkipped.Text = $"{config.TimesSkipped}";
 
-        double progress = remaining.TotalSeconds / config.WorkSec;
+        double progress = remaining.TotalSeconds / timer.currentWorkTime.TotalSeconds;
         progress = Math.Clamp(progress, 0, 1);
         DrawArc(progress);
     }
