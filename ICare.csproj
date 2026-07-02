@@ -24,6 +24,7 @@
       <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.3" />
         <EmbeddedResource Include="eye.ico" />
         <Resource Include="eye.ico" />
+        <Resource Include="background.png" />
     </ItemGroup>
 
 </Project>

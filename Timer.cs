@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace ICare;
+﻿namespace ICare;
 
 public class Timer
 {
@@ -31,7 +29,7 @@ public class Timer
                     if (SecondsLeft > 60)
                         await Task.Delay(SecondsLeft * 1000 - 60 * 1000, token);
                     Notifier.SendWarning();
-                    await Task.Delay(60 * 1000, token);
+                    await Task.Delay(SecondsLeft * 1000, token);
                 }
 
                 if (!SkipNext)
