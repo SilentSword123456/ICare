@@ -17,6 +17,7 @@ public partial class App : Application
     private Keyboard keyboard;
     private BlackoutWindow blackout;
     private Timer appTimer;
+    private SessionMonitor sessionMonitor;
     private Mutex? _mutex;
     
     protected override void OnStartup(StartupEventArgs e)
@@ -36,6 +37,7 @@ public partial class App : Application
         blackout = new BlackoutWindow(config, keyboard);
         appTimer = new Timer(config, blackout.TriggerBreak);
         dashboard = new Dashboard(config, appTimer, keyboard);
+        sessionMonitor = new SessionMonitor(appTimer);
         
         var helperWindow = new Window();
         helperWindow.Width = 0;
@@ -68,8 +70,14 @@ public partial class App : Application
         
         _cts = new CancellationTokenSource();
         
-        var tray = new TrayIcon(_cts, dashboard);
+        var tray = new TrayIcon(CloseApp, dashboard);
         _ = appTimer.Start();
         dashboard.Open();
+    }
+
+    public void CloseApp()
+    {
+        sessionMonitor.Stop();
+        _cts.Cancel();
     }
 }

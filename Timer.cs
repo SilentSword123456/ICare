@@ -1,67 +1,120 @@
-﻿namespace ICare;
+﻿using System.Diagnostics;
+
+namespace ICare;
 
 public class Timer
 {
     private readonly Config config;
-    public bool SkipNext { get; set; } = false;
-    public DateTime BreakDate { get; private set; }
-    public TimeSpan currentWorkTime;
-    private CancellationTokenSource cts;
     private Func<Task> triggerBreak;
+    public bool SkipNext { get; set; } = false;
+    public TimeSpan currentWorkTime;
+    private CancellationTokenSource globalCts;
+    private CancellationTokenSource cycleCts;
+    private readonly Stopwatch workStopwatch;
+    private readonly Stopwatch breakStopwatch;
+    private Boolean isPaused;
+    
+    public TimeSpan Remaining => currentWorkTime - workStopwatch.Elapsed > TimeSpan.Zero ? currentWorkTime - workStopwatch.Elapsed : TimeSpan.Zero;
 
-    public Timer(Config _config, Func<Task> _triggerBreak) {
-        config = _config;
-        triggerBreak = _triggerBreak;
-        cts = new CancellationTokenSource();
+    public Timer(Config config, Func<Task> triggerBreak) {
+        this.config = config;
+        this.triggerBreak = triggerBreak;
+        globalCts = new CancellationTokenSource();
+        workStopwatch = new();
+        breakStopwatch = new();
     }
 
     public async Task Start() {
-        var token = cts.Token;
-        while (!token.IsCancellationRequested) {
+        var globalToken = globalCts.Token;
+        
+        while (!globalToken.IsCancellationRequested) {
             currentWorkTime = TimeSpan.FromSeconds(config.WorkSec);
-            BreakDate = DateTime.Now + currentWorkTime;
             SkipNext = false;
-            try
-            {
-                while (DateTime.Now < BreakDate && !token.IsCancellationRequested)
-                {
-                    var SecondsLeft = (int)(BreakDate - DateTime.Now).TotalSeconds;
-                    if (SecondsLeft > 60)
-                        await Task.Delay(SecondsLeft * 1000 - 60 * 1000, token);
-                    Notifier.SendWarning();
-                    await Task.Delay(SecondsLeft * 1000, token);
-                }
+            isPaused = false;
+            workStopwatch.Restart();
+            
+            try {
+                while (true) {
+                    cycleCts = CancellationTokenSource.CreateLinkedTokenSource(globalToken);
 
-                if (!SkipNext)
+                    TimeSpan waitTime;
+                    if (isPaused)
+                        waitTime = Timeout.InfiniteTimeSpan;
+                    else if (Remaining > TimeSpan.FromSeconds(60))
+                        waitTime = Remaining - TimeSpan.FromSeconds(60);
+                    else
+                        waitTime = Remaining;
+                    
+
+                    try
+                    {
+                        Debug.WriteLine("Waiting for " + waitTime + " seconds");
+                        await Task.Delay(waitTime, cycleCts.Token);
+                    }
+                    catch (TaskCanceledException)
+                    {
+                        if (globalToken.IsCancellationRequested)
+                            throw;
+                        continue;
+                    }
+
+                    if (isPaused)
+                        continue;
+                    
+                    Debug.WriteLine(Remaining <= TimeSpan.FromSeconds(60) && Remaining != TimeSpan.Zero);
+                    if (Remaining <= TimeSpan.FromSeconds(60) && Remaining != TimeSpan.Zero && !SkipNext)
+                    {
+                        Notifier.SendWarning();
+                        continue;
+                    }
+                    
+                    break;
+                }
+                
+                if(!SkipNext)
                     await triggerBreak();
             }
-            catch (TaskCanceledException)
-            {
+            catch (TaskCanceledException) {
                 break;
             }
         }
     }
 
+    public void Pause() {
+        if (isPaused) return;
+        isPaused = true;
+        workStopwatch.Stop();
+        cycleCts?.Cancel();
+        breakStopwatch.Restart();
+    }
+
+    public void Resume() {
+        if (!isPaused) return;
+        isPaused = false;
+        workStopwatch.Start();
+        cycleCts?.Cancel();
+        if (breakStopwatch.Elapsed >= TimeSpan.FromSeconds(config.BreakSec)) {
+            breakStopwatch.Stop();
+            Restart();
+        }
+    }
+
     public void Restart() {
-        cts.Cancel();
-        cts = new CancellationTokenSource();
+        globalCts.Cancel();
+        globalCts = new CancellationTokenSource();
         _ = Start();
     }
-    
-    public void SkipNextBreak()
-    {
-        if (SkipNext == true)
-            return;
+
+    public void SkipNextBreak() {
+        if (SkipNext) return;
         SkipNext = true;
         config.TimesSkipped++;
     }
 
-    public void Stop() {
-        cts.Cancel();
-    }
+    public void Stop() => globalCts.Cancel();
 
     public void SnoozeBreak(int minutes) {
-        BreakDate = BreakDate.AddMinutes(minutes);
-        currentWorkTime = currentWorkTime + TimeSpan.FromMinutes(minutes);
+        currentWorkTime += TimeSpan.FromMinutes(minutes);
+        cycleCts?.Cancel();
     }
 }
