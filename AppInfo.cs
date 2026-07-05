@@ -5,15 +5,18 @@ namespace ICare;
 public class AppInfo {
     public const string Name = "ICare";
     
-    public static bool IsLightTheme => GetIsLightTheme();
+    public static Theme SystemTheme => GetTheme();
 
-    private static bool GetIsLightTheme() {
+    private static Theme GetTheme() {
         const string keyPath = @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";
         const string valueName = "AppsUseLightTheme";
 
         using var key = Registry.CurrentUser.OpenSubKey(keyPath);
         var value = key?.GetValue(valueName);
-
-        return value == null || (int) value == 1;
+        
+        if (value == null || (int) value == 1)
+            return Theme.Light;
+        
+        return Theme.Dark;
     }
 }

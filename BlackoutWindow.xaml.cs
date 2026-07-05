@@ -1,18 +1,39 @@
-﻿using System.Windows;
+﻿using System.Diagnostics;
+using System.Windows;
 using System.Windows.Media.Imaging;
 
 namespace ICare;
 
 public partial class BlackoutWindow : Window {
+    private static BitmapImage background;
+    private static Theme? theme;
+    
     public BlackoutWindow() {
         InitializeComponent();
         ApplyBackgroundForTheme();
     }
+
+    private void verifyBackground() {
+        if (theme != null && theme == AppInfo.SystemTheme)
+            return;
+
+        if (AppInfo.SystemTheme == Theme.Light) {
+            background = new BitmapImage(new Uri($"pack://application:,,,/{AppInfo.Name};component/Assets/background.png"));
+            background.Freeze();
+            theme = Theme.Light;
+            return;
+        }
+
+        background = new BitmapImage(new Uri($"pack://application:,,,/{AppInfo.Name};component/Assets/background-dark.png"));
+        background.Freeze();
+        theme = Theme.Dark;
+        return;
+    }
     
     private void ApplyBackgroundForTheme() {
-        BackgroundImage.ImageSource = AppInfo.IsLightTheme ? 
-            new BitmapImage(new Uri($"pack://application:,,,/{AppInfo.Name};component/Assets/background.png")) : 
-            new BitmapImage(new Uri($"pack://application:,,,/{AppInfo.Name};component/Assets/background-dark.png"));
+        verifyBackground();
+        
+        BackgroundImage.ImageSource = background;
     }
 
     static async public Task TriggerBreak(Keyboard keyboard, Config config) {
