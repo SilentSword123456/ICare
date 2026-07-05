@@ -9,8 +9,7 @@ namespace ICare;
 /// <summary>
 /// Interaction logic for App.xaml
 /// </summary>
-public partial class App : Application
-{
+public partial class App : Application {
     private CancellationTokenSource _cts;
     private Dashboard dashboard;
     private Config config;
@@ -19,12 +18,10 @@ public partial class App : Application
     private Timer appTimer;
     private SessionMonitor sessionMonitor;
     private Mutex? _mutex;
-    
-    protected override void OnStartup(StartupEventArgs e)
-    {
+
+    protected override void OnStartup(StartupEventArgs e) {
         _mutex = new Mutex(true, AppInfo.Name, out bool isNew);
-        if (!isNew)
-        {
+        if (!isNew) {
             MessageBox.Show($"{AppInfo.Name} is already running. Check the system tray.");
             Shutdown();
             return;
@@ -38,7 +35,7 @@ public partial class App : Application
         appTimer = new Timer(config, blackout.TriggerBreak);
         dashboard = new Dashboard(config, appTimer, keyboard);
         sessionMonitor = new SessionMonitor(appTimer);
-        
+
         var helperWindow = new Window();
         helperWindow.Width = 0;
         helperWindow.Height = 0;
@@ -50,12 +47,10 @@ public partial class App : Application
         var handle = new WindowInteropHelper(helperWindow).Handle;
         keyboard.RegisterSkipHotkey(handle, appTimer.SkipNextBreak);
         keyboard.StartListening(handle);
-        
-        ToastNotificationManagerCompat.OnActivated += args =>
-        {
+
+        ToastNotificationManagerCompat.OnActivated += args => {
             var toastArgs = ToastArguments.Parse(args.Argument);
-            switch (toastArgs["action"])
-            {
+            switch (toastArgs["action"]) {
                 case "skip":
                     appTimer.SkipNextBreak();
                     break;
@@ -67,16 +62,15 @@ public partial class App : Application
                     break;
             }
         };
-        
+
         _cts = new CancellationTokenSource();
-        
+
         var tray = new TrayIcon(CloseApp, dashboard);
         _ = appTimer.Start();
         dashboard.Open();
     }
 
-    public void CloseApp()
-    {
+    public void CloseApp() {
         sessionMonitor.Stop();
         _cts.Cancel();
     }

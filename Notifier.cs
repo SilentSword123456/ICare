@@ -2,10 +2,8 @@
 
 namespace ICare;
 
-public class Notifier
-{
-    public static void SendWarning()
-    {
+public class Notifier {
+    public static void SendWarning() {
         new ToastContentBuilder()
             .AddText(AppInfo.Name)
             .AddText("You have 1 minute until your break.")

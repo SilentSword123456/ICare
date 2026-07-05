@@ -4,94 +4,94 @@
              Background="#F5F0E8">
     <Grid Margin="40">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
-            <ColumnDefinition Width="160"/>
-            <ColumnDefinition Width="160"/>
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="160" />
+            <ColumnDefinition Width="160" />
         </Grid.ColumnDefinitions>
-        
+
         <StackPanel Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
             <Grid Width="180" Height="180">
                 <Canvas Width="180" Height="180">
                     <Ellipse Canvas.Left="4" Canvas.Top="4"
                              Width="172" Height="172"
                              Stroke="#DDD8D0" StrokeThickness="8"
-                             Fill="Transparent"/>
+                             Fill="Transparent" />
                     <Path x:Name="TimerArc"
                           Stroke="#2D5A3D" StrokeThickness="8"
                           StrokeStartLineCap="Round" StrokeEndLineCap="Round"
-                          Fill="Transparent"/>
+                          Fill="Transparent" />
                 </Canvas>
                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                     <TextBlock x:Name="CountdownLabel" Text="20:00"
                                Foreground="#2D2D2D" FontSize="32" FontWeight="Bold"
-                               HorizontalAlignment="Center"/>
+                               HorizontalAlignment="Center" />
                     <TextBlock Text="until break" Foreground="#8B8B8B" FontSize="11"
-                               HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                               HorizontalAlignment="Center" Margin="0,2,0,0" />
                 </StackPanel>
             </Grid>
 
             <TextBlock x:Name="SkipStatusLabel" Text="Break scheduled"
                        Foreground="#8B8B8B" FontSize="12"
-                       HorizontalAlignment="Center" Margin="0,20,0,0"/>
+                       HorizontalAlignment="Center" Margin="0,20,0,0" />
         </StackPanel>
 
         <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
             <Border Background="#EDE8E0" CornerRadius="12" Padding="16" Margin="0,0,0,12">
                 <StackPanel>
-                    <TextBlock Text="WORK" Foreground="#8B8B8B" FontSize="10"/>
+                    <TextBlock Text="WORK" Foreground="#8B8B8B" FontSize="10" />
                     <StackPanel Orientation="Horizontal">
                         <TextBlock x:Name="WorkLabel" Text="20"
-                                   Foreground="#2D2D2D" FontSize="28" FontWeight="Bold"/>
+                                   Foreground="#2D2D2D" FontSize="28" FontWeight="Bold" />
                         <TextBlock Text="min" Foreground="#8B8B8B" FontSize="12"
-                                   VerticalAlignment="Bottom" Margin="4,0,0,4"/>
+                                   VerticalAlignment="Bottom" Margin="4,0,0,4" />
                     </StackPanel>
-                    
+
                     <Border Background="#2747D6" Height="4" VerticalAlignment="Bottom"
                             HorizontalAlignment="Stretch" CornerRadius="0,0,12,12"
-                            Margin="-16,-4,-16,-16"/>
-                    
+                            Margin="-16,-4,-16,-16" />
+
                 </StackPanel>
             </Border>
 
             <Border Background="#EDE8E0" CornerRadius="12" Padding="16" Margin="0,0,0,12">
                 <StackPanel>
-                    <TextBlock Text="BREAK" Foreground="#8B8B8B" FontSize="10"/>
+                    <TextBlock Text="BREAK" Foreground="#8B8B8B" FontSize="10" />
                     <StackPanel Orientation="Horizontal">
                         <TextBlock x:Name="BreakLabel" Text="20"
-                                   Foreground="#2D2D2D" FontSize="28" FontWeight="Bold"/>
+                                   Foreground="#2D2D2D" FontSize="28" FontWeight="Bold" />
                         <TextBlock Text="sec" Foreground="#8B8B8B" FontSize="12"
-                                   VerticalAlignment="Bottom" Margin="4,0,0,4"/>
+                                   VerticalAlignment="Bottom" Margin="4,0,0,4" />
                     </StackPanel>
-                    
+
                     <Border Background="#006400" Height="4" VerticalAlignment="Bottom"
                             HorizontalAlignment="Stretch" CornerRadius="0,0,12,12"
-                            Margin="-16,-4,-16,-16"/>
-                    
+                            Margin="-16,-4,-16,-16" />
+
                 </StackPanel>
             </Border>
         </StackPanel>
-        
+
         <StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center">
             <Border Background="#EDE8E0" CornerRadius="12" Padding="16" Margin="0,0,0,12">
                 <StackPanel>
-                    <TextBlock Text="TIMES SKIPPED BREAK" Foreground="#8B8B8B" FontSize="10"/>
+                    <TextBlock Text="TIMES SKIPPED BREAK" Foreground="#8B8B8B" FontSize="10" />
                     <StackPanel Orientation="Horizontal">
                         <TextBlock x:Name="TimesSkipped" Text="0"
-                                   Foreground="#2D2D2D" FontSize="28" FontWeight="Bold"/>
+                                   Foreground="#2D2D2D" FontSize="28" FontWeight="Bold" />
                         <TextBlock Text="times" Foreground="#8B8B8B" FontSize="12"
-                                   VerticalAlignment="Bottom" Margin="4,0,0,4"/>
+                                   VerticalAlignment="Bottom" Margin="4,0,0,4" />
                     </StackPanel>
                 </StackPanel>
             </Border>
-            
+
             <Border Background="#EDE8E0" CornerRadius="12" Padding="16" Margin="0,0,0,12">
                 <StackPanel>
-                    <TextBlock Text="ALL TIME BREAK" Foreground="#8B8B8B" FontSize="10"/>
+                    <TextBlock Text="ALL TIME BREAK" Foreground="#8B8B8B" FontSize="10" />
                     <StackPanel Orientation="Horizontal">
                         <TextBlock x:Name="BreakStatMin" Text="0"
-                                   Foreground="#2D2D2D" FontSize="28" FontWeight="Bold"/>
+                                   Foreground="#2D2D2D" FontSize="28" FontWeight="Bold" />
                         <TextBlock Text="min" Foreground="#8B8B8B" FontSize="12"
-                                   VerticalAlignment="Bottom" Margin="4,0,0,4"/>
+                                   VerticalAlignment="Bottom" Margin="4,0,0,4" />
                     </StackPanel>
                 </StackPanel>
             </Border>

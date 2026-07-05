@@ -3,14 +3,12 @@ using ICare.Views;
 
 namespace ICare;
 
-public partial class Dashboard : Window
-{
+public partial class Dashboard : Window {
     private Config config;
     private Timer timer;
     private Keyboard keyboard;
 
-    public Dashboard(Config config, Timer timer, Keyboard keyboard)
-    {
+    public Dashboard(Config config, Timer timer, Keyboard keyboard) {
         this.config = config;
         this.timer = timer;
         this.keyboard = keyboard;
@@ -19,8 +17,7 @@ public partial class Dashboard : Window
         ContentArea.Content = new OverviewView(this.config, this.timer);
     }
 
-    private void NavigateTo(object view)
-    {
+    private void NavigateTo(object view) {
         ContentArea.Opacity = 0;
         ContentArea.Content = view;
 
@@ -28,32 +25,27 @@ public partial class Dashboard : Window
         ContentArea.BeginAnimation(OpacityProperty, fade);
     }
 
-    private void NavOverview_Click(object sender, RoutedEventArgs e)
-    {
+    private void NavOverview_Click(object sender, RoutedEventArgs e) {
         NavigateTo(new OverviewView(config, timer));
         NavOverview.Style = (Style)FindResource("NavButtonActive");
         NavSettings.Style = (Style)FindResource("NavButton");
     }
 
-    private void NavSettings_Click(object sender, RoutedEventArgs e)
-    {
+    private void NavSettings_Click(object sender, RoutedEventArgs e) {
         NavigateTo(new SettingsView(config, timer.Restart, keyboard.ReloadHotkey));
         NavSettings.Style = (Style)FindResource("NavButtonActive");
         NavOverview.Style = (Style)FindResource("NavButton");
     }
-    
-    protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
-    {
+
+    protected override void OnClosing(System.ComponentModel.CancelEventArgs e) {
         e.Cancel = true;
         Hide();
     }
-    
-    public void Open()
-    {
+
+    public void Open() {
         if (IsVisible)
             Activate();
         else
             Show();
     }
-    
 }

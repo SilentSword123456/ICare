@@ -2,8 +2,7 @@
 
 namespace ICare;
 
-public class Timer
-{
+public class Timer {
     private readonly Config config;
     private Func<Task> triggerBreak;
     public bool SkipNext { get; set; } = false;
@@ -13,8 +12,10 @@ public class Timer
     private readonly Stopwatch workStopwatch;
     private readonly Stopwatch breakStopwatch;
     private Boolean isPaused;
-    
-    public TimeSpan Remaining => currentWorkTime - workStopwatch.Elapsed > TimeSpan.Zero ? currentWorkTime - workStopwatch.Elapsed : TimeSpan.Zero;
+
+    public TimeSpan Remaining => currentWorkTime - workStopwatch.Elapsed > TimeSpan.Zero
+        ? currentWorkTime - workStopwatch.Elapsed
+        : TimeSpan.Zero;
 
     public Timer(Config config, Func<Task> triggerBreak) {
         this.config = config;
@@ -26,13 +27,13 @@ public class Timer
 
     public async Task Start() {
         var globalToken = globalCts.Token;
-        
+
         while (!globalToken.IsCancellationRequested) {
             currentWorkTime = TimeSpan.FromSeconds(config.WorkSec);
             SkipNext = false;
             isPaused = false;
             workStopwatch.Restart();
-            
+
             try {
                 while (true) {
                     cycleCts = CancellationTokenSource.CreateLinkedTokenSource(globalToken);
@@ -44,15 +45,12 @@ public class Timer
                         waitTime = Remaining - TimeSpan.FromSeconds(60);
                     else
                         waitTime = Remaining;
-                    
 
-                    try
-                    {
-                        Debug.WriteLine("Waiting for " + waitTime + " seconds");
+
+                    try {
                         await Task.Delay(waitTime, cycleCts.Token);
                     }
-                    catch (TaskCanceledException)
-                    {
+                    catch (TaskCanceledException) {
                         if (globalToken.IsCancellationRequested)
                             throw;
                         continue;
@@ -60,18 +58,16 @@ public class Timer
 
                     if (isPaused)
                         continue;
-                    
-                    Debug.WriteLine(Remaining <= TimeSpan.FromSeconds(60) && Remaining != TimeSpan.Zero);
-                    if (Remaining <= TimeSpan.FromSeconds(60) && Remaining != TimeSpan.Zero && !SkipNext)
-                    {
+
+                    if (Remaining <= TimeSpan.FromSeconds(60) && Remaining != TimeSpan.Zero && !SkipNext) {
                         Notifier.SendWarning();
                         continue;
                     }
-                    
+
                     break;
                 }
-                
-                if(!SkipNext)
+
+                if (!SkipNext)
                     await triggerBreak();
             }
             catch (TaskCanceledException) {

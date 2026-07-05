@@ -3,43 +3,65 @@ using System.Text.Json;
 
 namespace ICare;
 
-public class Config
-{
+public class Config {
     private int _workSec;
-    public int WorkSec
-    {
+
+    public int WorkSec {
         get => _workSec;
-        set { _workSec = value; Save(); }
+        set {
+            _workSec = value;
+            Save();
+        }
     }
+
     private int _breakSec;
-    public int BreakSec
-    {
+
+    public int BreakSec {
         get => _breakSec;
-        set { _breakSec = value; Save(); }
+        set {
+            _breakSec = value;
+            Save();
+        }
     }
+
     private uint _hotkeyVk;
-    public uint HotkeyVK
-    {
+
+    public uint HotkeyVK {
         get => _hotkeyVk;
-        set { _hotkeyVk = value; Save(); }
+        set {
+            _hotkeyVk = value;
+            Save();
+        }
     }
+
     private int _breakStatSec;
-    public int BreakStatSec
-    {
+
+    public int BreakStatSec {
         get => _breakStatSec;
-        set { _breakStatSec = value; Save(); }
+        set {
+            _breakStatSec = value;
+            Save();
+        }
     }
+
     private string _breakMessage;
-    public string BreakMessage
-    {
+
+    public string BreakMessage {
         get => _breakMessage;
-        set { _breakMessage = value; Save(); }
+        set {
+            _breakMessage = value;
+            Save();
+        }
     }
+
     private int _timesSkipped;
-    public int TimesSkipped
-    {
+
+    public int TimesSkipped {
         get => _timesSkipped;
-        set { _timesSkipped = value; Save(); }
+        set {
+            _timesSkipped = value;
+            Save();
+        }
     }
 
     private static string ConfigPath => Path.Combine(
@@ -48,8 +70,7 @@ public class Config
         "config.json"
     );
 
-    public Config()
-    {
+    public Config() {
         _workSec = 20 * 60;
         _breakSec = 20;
         _hotkeyVk = 0x51;
@@ -59,14 +80,12 @@ public class Config
         Directory.CreateDirectory(Path.GetDirectoryName(ConfigPath)!);
     }
 
-    public void Save()
-    {
+    public void Save() {
         var data = JsonSerializer.Serialize(this);
         File.WriteAllText(ConfigPath, data);
     }
 
-    public void Load()
-    {
+    public void Load() {
         try {
             string data = File.ReadAllText(ConfigPath);
 
@@ -91,7 +110,8 @@ public class Config
                 Console.WriteLine("Config file generated successfully!");
             }
             catch (Exception ex) {
-                Console.WriteLine($"Unexpected error occurred while trying to regenerate the file. Copy the following message and report the bug on the GitHub repo:\n{ex.Message}");
+                Console.WriteLine(
+                    $"Unexpected error occurred while trying to regenerate the file. Copy the following message and report the bug on the GitHub repo:\n{ex.Message}");
             }
         }
     }

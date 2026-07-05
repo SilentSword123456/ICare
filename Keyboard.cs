@@ -4,8 +4,7 @@ using System.Windows.Interop;
 
 namespace ICare;
 
-public class Keyboard : IDisposable
-{
+public class Keyboard : IDisposable {
     [DllImport("user32.dll")]
     static extern IntPtr SetWindowsHookEx(int idHook, LowLevelKeyboardProc callback, IntPtr hMod, uint dwThreadId);
 
@@ -69,11 +68,11 @@ public class Keyboard : IDisposable
 
     private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled) {
         const int WM_HOTKEY = 0x0312;
-        if (msg == WM_HOTKEY && wParam.ToInt32() == HOTKEY_ID)
-        {
+        if (msg == WM_HOTKEY && wParam.ToInt32() == HOTKEY_ID) {
             _onSkip();
             handled = true;
         }
+
         return IntPtr.Zero;
     }
 

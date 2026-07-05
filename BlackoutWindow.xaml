@@ -6,22 +6,22 @@
         ShowInTaskbar="False"
         ResizeMode="NoResize">
     <Window.Background>
-        <ImageBrush ImageSource="/ICare;component/background.png" Stretch="UniformToFill"/>
+        <ImageBrush ImageSource="/ICare;component/background.png" Stretch="UniformToFill" />
     </Window.Background>
-    
+
     <Grid>
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
             <TextBlock x:Name="MessageText"
                        Text="Time to rest your eyes"
                        Foreground="White"
                        FontSize="36"
-                       HorizontalAlignment="Center"/>
+                       HorizontalAlignment="Center" />
             <TextBlock x:Name="CountdownText"
                        Text="20"
                        Foreground="White"
                        FontSize="72"
                        HorizontalAlignment="Center"
-                       Margin="0,20,0,0"/>
+                       Margin="0,20,0,0" />
         </StackPanel>
     </Grid>
 </Window>

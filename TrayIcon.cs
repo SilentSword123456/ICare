@@ -2,8 +2,7 @@
 
 namespace ICare;
 
-public class TrayIcon : IDisposable
-{
+public class TrayIcon : IDisposable {
     private NotifyIcon trayIcon;
     private Dashboard dashboard;
     private Action CloseApp;
@@ -28,16 +27,12 @@ public class TrayIcon : IDisposable
         trayIcon.ContextMenuStrip = menu;
     }
 
-    private void Exit()
-    {
-        System.Windows.Application.Current.Dispatcher.Invoke(() => {
-            System.Windows.Application.Current.Shutdown();
-        });
+    private void Exit() {
+        System.Windows.Application.Current.Dispatcher.Invoke(() => { System.Windows.Application.Current.Shutdown(); });
         CloseApp();
     }
 
-    public void Dispose()
-    {
+    public void Dispose() {
         trayIcon.Dispose();
     }
 }

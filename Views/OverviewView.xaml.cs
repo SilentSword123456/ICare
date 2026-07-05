@@ -4,14 +4,12 @@ using UserControl = System.Windows.Controls.UserControl;
 
 namespace ICare.Views;
 
-public partial class OverviewView : UserControl
-{
+public partial class OverviewView : UserControl {
     private Config config;
     private Timer timer;
     private DispatcherTimer _uiTimer;
 
-    public OverviewView(Config _config, Timer _timer)
-    {
+    public OverviewView(Config _config, Timer _timer) {
         config = _config;
         timer = _timer;
         InitializeComponent();
@@ -27,21 +25,19 @@ public partial class OverviewView : UserControl
         _uiTimer.Start();
     }
 
-    private void UpdateUI()
-    {
+    private void UpdateUI() {
         var remaining = timer.Remaining;
 
         CountdownLabel.Text = $"{(int)remaining.TotalMinutes}:{remaining.Seconds:D2}";
-        if (timer.SkipNext == true)
-        {
+        if (timer.SkipNext == true) {
             SkipStatusLabel.Text = "Skipped";
             SkipStatusLabel.Foreground = new SolidColorBrush(Colors.DarkRed);
-            TimerArc.Stroke  = new SolidColorBrush(Colors.DarkRed);
+            TimerArc.Stroke = new SolidColorBrush(Colors.DarkRed);
         }
         else {
             SkipStatusLabel.Text = "Scheduled";
             SkipStatusLabel.Foreground = new SolidColorBrush(Colors.DimGray);
-            TimerArc.Stroke  = new SolidColorBrush(Colors.DarkGreen);
+            TimerArc.Stroke = new SolidColorBrush(Colors.DarkGreen);
         }
 
         WorkLabel.Text = $"{config.WorkSec / 60}";
@@ -53,18 +49,16 @@ public partial class OverviewView : UserControl
         progress = Math.Clamp(progress, 0, 1);
         DrawArc(progress);
     }
-    
-    private void DrawArc(double progress)
-    {
+
+    private void DrawArc(double progress) {
         double radius = 82;
         double cx = 90, cy = 90;
 
-        if (progress >= 0.999)
-        {
+        if (progress >= 0.999) {
             TimerArc.Data = new EllipseGeometry(new System.Windows.Point(cx, cy), radius, radius);
             return;
         }
-        
+
         double angle = progress * 360 - 90;
         double radians = angle * Math.PI / 180;
 
@@ -73,14 +67,12 @@ public partial class OverviewView : UserControl
 
         bool isLargeArc = progress > 0.5;
 
-        var figure = new PathFigure
-        {
+        var figure = new PathFigure {
             StartPoint = new System.Windows.Point(cx, cy - radius),
             IsClosed = false
         };
 
-        figure.Segments.Add(new ArcSegment
-        {
+        figure.Segments.Add(new ArcSegment {
             Point = new System.Windows.Point(x, y),
             Size = new System.Windows.Size(radius, radius),
             IsLargeArc = isLargeArc,
