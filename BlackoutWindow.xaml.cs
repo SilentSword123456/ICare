@@ -40,7 +40,7 @@ public partial class BlackoutWindow : Window {
         }
 
         foreach (var window in windows)
-            window.Hide();
+            window.Close();
 
         keyboard.StopBlocking();
         config.BreakStatSec += config.BreakSec;
