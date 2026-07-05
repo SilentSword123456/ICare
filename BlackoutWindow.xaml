@@ -6,7 +6,7 @@
         ShowInTaskbar="False"
         ResizeMode="NoResize">
     <Window.Background>
-        <ImageBrush ImageSource="/ICare;component/background.png" Stretch="UniformToFill" />
+        <ImageBrush x:Name="BackgroundImage" Stretch="UniformToFill" />
     </Window.Background>
 
     <Grid>

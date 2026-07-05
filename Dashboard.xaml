@@ -7,7 +7,7 @@
         FontFamily="{materialDesign:MaterialDesignFont}"
         Title="ICare" Height="650" Width="900"
         WindowStyle="SingleBorderWindow"
-        Icon="pack://application:,,,/eye.ico">
+        Icon="pack://application:,,,/Assets/eye.ico">
     <materialDesign:DialogHost Identifier="RootDialog">
         <Grid>
             <Grid.ColumnDefinitions>

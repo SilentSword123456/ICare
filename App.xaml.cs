@@ -14,7 +14,6 @@ public partial class App : Application {
     private Dashboard dashboard;
     private Config config;
     private Keyboard keyboard;
-    private BlackoutWindow blackout;
     private Timer appTimer;
     private SessionMonitor sessionMonitor;
     private Mutex? _mutex;
@@ -31,8 +30,7 @@ public partial class App : Application {
         config = new Config();
         config.Load();
         keyboard = new Keyboard(config);
-        blackout = new BlackoutWindow(config, keyboard);
-        appTimer = new Timer(config, blackout.TriggerBreak);
+        appTimer = new Timer(config, keyboard);
         dashboard = new Dashboard(config, appTimer, keyboard);
         sessionMonitor = new SessionMonitor(appTimer);
 

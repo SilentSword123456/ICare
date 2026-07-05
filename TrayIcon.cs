@@ -12,7 +12,7 @@ public class TrayIcon : IDisposable {
         this.dashboard = dashboard;
         trayIcon = new NotifyIcon();
         using var stream = System.Reflection.Assembly.GetExecutingAssembly()
-            .GetManifestResourceStream("ICare.eye.ico");
+            .GetManifestResourceStream("ICare.Assets.eye.ico");
         trayIcon.Icon = new System.Drawing.Icon(stream!);
         trayIcon.Visible = true;
         trayIcon.Text = AppInfo.Name;

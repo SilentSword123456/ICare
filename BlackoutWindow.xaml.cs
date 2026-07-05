@@ -1,25 +1,27 @@
 ﻿using System.Windows;
+using System.Windows.Media.Imaging;
 
 namespace ICare;
 
 public partial class BlackoutWindow : Window {
-    private Config config;
-    private Keyboard keyboard;
-
-    public BlackoutWindow(Config _config, Keyboard _keyboard) {
-        config = _config;
-        keyboard = _keyboard;
+    public BlackoutWindow() {
         InitializeComponent();
+        ApplyBackgroundForTheme();
+    }
+    
+    private void ApplyBackgroundForTheme() {
+        BackgroundImage.ImageSource = AppInfo.IsLightTheme ? 
+            new BitmapImage(new Uri($"pack://application:,,,/{AppInfo.Name};component/Assets/background.png")) : 
+            new BitmapImage(new Uri($"pack://application:,,,/{AppInfo.Name};component/Assets/background-dark.png"));
     }
 
-    async public Task TriggerBreak() {
+    static async public Task TriggerBreak(Keyboard keyboard, Config config) {
         keyboard.StartBlocking();
         config.Load();
-        MessageText.Text = config.BreakMessage;
 
         var windows = System.Windows.Forms.Screen.AllScreens
             .Select(screen => {
-                var window = new BlackoutWindow(config, keyboard);
+                var window = new BlackoutWindow();
                 window.Left = screen.Bounds.Left;
                 window.Top = screen.Bounds.Top;
                 window.Width = screen.Bounds.Width;

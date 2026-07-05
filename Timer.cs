@@ -4,7 +4,7 @@ namespace ICare;
 
 public class Timer {
     private readonly Config config;
-    private Func<Task> triggerBreak;
+    private Keyboard keyboard;
     public bool SkipNext { get; set; } = false;
     public TimeSpan currentWorkTime;
     private CancellationTokenSource globalCts;
@@ -17,9 +17,9 @@ public class Timer {
         ? currentWorkTime - workStopwatch.Elapsed
         : TimeSpan.Zero;
 
-    public Timer(Config config, Func<Task> triggerBreak) {
+    public Timer(Config config, Keyboard keyboard) {
         this.config = config;
-        this.triggerBreak = triggerBreak;
+        this.keyboard = keyboard;
         globalCts = new CancellationTokenSource();
         workStopwatch = new();
         breakStopwatch = new();
@@ -67,8 +67,9 @@ public class Timer {
                     break;
                 }
 
-                if (!SkipNext)
-                    await triggerBreak();
+                if (!SkipNext) {
+                    await BlackoutWindow.TriggerBreak(keyboard, config);
+                }
             }
             catch (TaskCanceledException) {
                 break;
