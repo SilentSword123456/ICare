@@ -12,6 +12,7 @@
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                 <TextBox x:Name="WorkBox" Style="{StaticResource StyledNumberBox}"
                          Width="50"
+                         PreviewTextInput="PreviewTextInputAcceptOnlyNumbers"
                          TextChanged="WorkBox_TextChanged" />
                 <TextBlock Text="minutes" Foreground="#8B8B8B" FontSize="13"
                            VerticalAlignment="Center" Margin="10,0,0,0" />
@@ -21,6 +22,7 @@
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                 <TextBox x:Name="BreakBox" Style="{StaticResource StyledNumberBox}"
                          Width="50"
+                         PreviewTextInput="PreviewTextInputAcceptOnlyNumbers"
                          TextChanged="BreakBox_TextChanged" />
                 <TextBlock Text="seconds" Foreground="#8B8B8B" FontSize="13"
                            VerticalAlignment="Center" Margin="10,0,0,0" />

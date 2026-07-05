@@ -1,7 +1,9 @@
 ﻿using System.Diagnostics;
 using System.Windows.Controls;
 using System.Windows;
+using System.Windows.Input;
 using MaterialDesignThemes.Wpf;
+using DataObject = System.Windows.DataObject;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace ICare.Views;
@@ -22,6 +24,9 @@ public partial class SettingsView : UserControl {
         HotkeyBox.Text = System.Windows.Input.KeyInterop.KeyFromVirtualKey((int)config.HotkeyVK).ToString();
         AutoStartToggle.IsChecked = StartupManager.IsEnabled();
         BreakMessage.Text = config.BreakMessage;
+        
+        DataObject.AddPastingHandler(WorkBox, OnPaste);
+        DataObject.AddPastingHandler(BreakBox, OnPaste);
     }
 
     private void WorkBox_TextChanged(object sender, TextChangedEventArgs e) {
@@ -40,6 +45,22 @@ public partial class SettingsView : UserControl {
             config.BreakSec = val;
             RecalculateWarningIcon();
         }
+    }
+    
+    private void OnPaste(object sender, DataObjectPastingEventArgs e) {
+        if (e.DataObject.GetDataPresent(typeof(string))) {
+            string text = (string)e.DataObject.GetData(typeof(string));
+            
+            if (!text.All(char.IsDigit)) 
+                e.CancelCommand();
+        } 
+        else {
+            e.CancelCommand();
+        }
+    }
+    
+    private void PreviewTextInputAcceptOnlyNumbers(object sender, TextCompositionEventArgs e) {
+        e.Handled = !e.Text.All(char.IsDigit);
     }
 
     private void HotkeyBox_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e) {
