@@ -86,6 +86,51 @@
                      VerticalScrollBarVisibility="Auto"
                      VerticalContentAlignment="Top"
                      HorizontalAlignment="Left" />
+            
+            <TextBlock Text="Restore app defaults" Foreground="#8B8B8B" FontSize="12" Margin="0,24,0,6" />
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Border Background="#E8E3DB" BorderBrush="#C0BAB0" BorderThickness="1"
+                            CornerRadius="10" Padding="65,5">
+                        <Button x:Name="ResetAppSettings"
+                            Click="ResetAppSettings_Click"
+                            Width="28" Height="28"
+                            VerticalAlignment="Center"
+                            Cursor="Hand"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Padding="0">
+                        <Button.Resources>
+                            <Style TargetType="Border" x:Key="HoverBorder">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="CornerRadius" Value="6"/>
+                            </Style>
+                        </Button.Resources>
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="Bg"
+                                        Background="Transparent"
+                                        CornerRadius="6"
+                                        Padding="6">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="Bg" Property="Background" Value="#FFEBEE"/>
+                                    </Trigger>
+                                    <Trigger Property="IsPressed" Value="True">
+                                        <Setter TargetName="Bg" Property="Background" Value="#FFCDD2"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+
+                        <Path Data="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"
+                              Fill="#D32F2F"
+                              Width="16" Height="16"
+                              Stretch="Uniform" />
+                    </Button>
+                </Border>
+            </StackPanel>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

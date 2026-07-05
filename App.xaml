@@ -5,12 +5,28 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml"/>
                 <materialDesign:BundledTheme BaseTheme="Light"
                                              PrimaryColor="Green"
                                              SecondaryColor="Teal" />
-                <ResourceDictionary
-                    Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign2.Defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign2.Defaults.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            
+            <Style x:Key="DangerOutlinedButton" TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
+                <Setter Property="Foreground" Value="Black"/>
+                <Setter Property="BorderBrush" Value="#D32F2F"/>
+                <Setter Property="materialDesign:ButtonAssist.CornerRadius" Value="4"/>
+                <Setter Property="materialDesign:RippleAssist.IsDisabled" Value="True"/>
+            </Style>
+            
+            <Style x:Key="DangerFilledButton" TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}">
+                <Setter Property="Background" Value="#D32F2F"/>
+                <Setter Property="BorderBrush" Value="#D32F2F"/>
+                <Setter Property="Foreground" Value="Black"/>
+                <Setter Property="materialDesign:ButtonAssist.CornerRadius" Value="4"/>
+                <Setter Property="materialDesign:RippleAssist.IsDisabled" Value="True"/>
+                <Setter Property="Effect" Value="{x:Null}"/>
+            </Style>
 
             <Style x:Key="PillToggleButton" TargetType="ToggleButton">
                 <Setter Property="Cursor" Value="Hand" />

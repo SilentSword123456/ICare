@@ -1,5 +1,7 @@
-﻿using System.Windows.Controls;
+﻿using System.Diagnostics;
+using System.Windows.Controls;
 using System.Windows;
+using MaterialDesignThemes.Wpf;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace ICare.Views;
@@ -66,5 +68,22 @@ public partial class SettingsView : UserControl {
     private void RecalculateWarningIcon() {
         BreakWarningIcon.Visibility =
             config.WorkSec / 60 <= config.BreakSec ? Visibility.Collapsed : Visibility.Visible;
+    }
+
+    private async void ResetAppSettings_Click(object sender, RoutedEventArgs e) {
+        var result = await DialogHost.Show(new ConfirmResetDialog(), "RootDialog");
+
+        if (result is ResetDialogResult.Confirm) {
+            config.ResetToDefault();
+            restartTimer();
+            WorkBox.Text = $"{config.WorkSec / 60}";
+            BreakBox.Text = $"{config.BreakSec}";
+            RecalculateWarningIcon();
+            StartupManager.Disable();
+            AutoStartToggle.IsChecked = false;
+            HotkeyBox.Text = System.Windows.Input.KeyInterop.KeyFromVirtualKey((int)config.HotkeyVK).ToString();
+            BreakMessage.Text = config.BreakMessage;
+        }
+        
     }
 }

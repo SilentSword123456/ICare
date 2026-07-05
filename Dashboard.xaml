@@ -5,29 +5,30 @@
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{materialDesign:MaterialDesignFont}"
-        Title="ICare" Height="600" Width="850"
+        Title="ICare" Height="650" Width="900"
         WindowStyle="SingleBorderWindow"
         Icon="pack://application:,,,/eye.ico">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+    <materialDesign:DialogHost Identifier="RootDialog">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
+            <Border Grid.Column="0" Background="#EDE8E0" Padding="12,24,12,24">
+                <StackPanel>
+                    <Button x:Name="NavOverview" Content="Overview"
+                            Click="NavOverview_Click"
+                            Margin="0,0,0,4"
+                            Style="{StaticResource NavButtonActive}" />
+                    <Button x:Name="NavSettings" Content="Settings"
+                            Click="NavSettings_Click"
+                            Margin="0,0,0,4"
+                            Style="{StaticResource NavButton}" />
+                </StackPanel>
+            </Border>
 
-        <Border Grid.Column="0" Background="#EDE8E0" Padding="12,24,12,24">
-            <StackPanel>
-                <Button x:Name="NavOverview" Content="Overview"
-                        Click="NavOverview_Click"
-                        Margin="0,0,0,4"
-                        Style="{StaticResource NavButtonActive}" />
-                <Button x:Name="NavSettings" Content="Settings"
-                        Click="NavSettings_Click"
-                        Margin="0,0,0,4"
-                        Style="{StaticResource NavButton}" />
-            </StackPanel>
-        </Border>
-
-        <ContentControl x:Name="ContentArea" Grid.Column="1" />
-    </Grid>
+            <ContentControl x:Name="ContentArea" Grid.Column="1" />
+        </Grid>
+    </materialDesign:DialogHost>
 </Window>

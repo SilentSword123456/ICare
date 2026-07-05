@@ -80,6 +80,15 @@ public class Config {
         Directory.CreateDirectory(Path.GetDirectoryName(ConfigPath)!);
     }
 
+    public void ResetToDefault() {
+        WorkSec = 20 * 60;
+        BreakSec = 20;
+        HotkeyVK = 0x51;
+        BreakStatSec = 0;
+        BreakMessage = "Time to rest your eyes";
+        TimesSkipped = 0;
+    }
+
     public void Save() {
         var data = JsonSerializer.Serialize(this);
         File.WriteAllText(ConfigPath, data);

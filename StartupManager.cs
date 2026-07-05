@@ -5,12 +5,16 @@ public static class StartupManager {
     private const string RegistryKey = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run";
 
     public static void Enable() {
+        if (IsEnabled())
+            return;
         string exePath = Environment.ProcessPath!;
         using var key = Registry.CurrentUser.OpenSubKey(RegistryKey, writable: true);
         key?.SetValue(AppInfo.Name, $"\"{exePath}\"");
     }
 
     public static void Disable() {
+        if (!IsEnabled())
+            return;
         using var key = Registry.CurrentUser.OpenSubKey(RegistryKey, writable: true);
         key?.DeleteValue(AppInfo.Name, throwOnMissingValue: false);
     }
