@@ -17,7 +17,7 @@ dashboard, ICare will still run. To close it you can right-click on the icon fro
 
 The app works by having a timer that once it ends it triggers the break. During the break the keyboard will be
 disabled (You can use ctrl+alt+delete to exit if something goes wrong) and a countdown with a break message will appear
-on the main screen, while the other screens should display just a black window.
+on the main screen, while the other screens should display just a calming picture.
 
 If you are in a game or doing something very important and you cant use the mouse to dismiss the timer from the
 notification you can use the shortcut ctrl+shift+Q by defaults to entirely skip the next break. The timer will continue,
