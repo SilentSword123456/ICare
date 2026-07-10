@@ -1,4 +1,7 @@
 ﻿using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Windows;
+using System.Windows.Interop;
 using Microsoft.Win32;
 
 namespace ICare;
@@ -7,11 +10,33 @@ public class SessionMonitor {
     private Timer timer;
     private bool isSessionLocked = false;
     private bool isPowerSuspended = false;
+    private bool isDisplayOff = false;
+    
+    [StructLayout(LayoutKind.Sequential)]
+    private struct POWERBROADCAST_SETTING {
+        public Guid PowerSetting;
+        public uint DataLength;
+        public byte Data;
+    }
+    
+    private static readonly Guid GUID_CONSOLE_DISPLAY_STATE = new Guid("6fe69556-704a-47a0-8f24-c28d936fda47");
+    
+    [DllImport("user32.dll", SetLastError = true)]
+    private static extern IntPtr RegisterPowerSettingNotification(IntPtr hRecipient, ref Guid PowerSettingGuid, int Flags);
 
-    public SessionMonitor(Timer timer) {
+
+    public SessionMonitor(Window window, Timer timer) {
+        ArgumentNullException.ThrowIfNull(window);
+        
         this.timer = timer;
         SystemEvents.SessionSwitch += OnSessionSwitch;
         SystemEvents.PowerModeChanged += OnPowerModeChanged;
+
+        var source = PresentationSource.FromVisual(window) as HwndSource;
+        source!.AddHook(handleHook);
+
+        var guid = GUID_CONSOLE_DISPLAY_STATE;
+        RegisterPowerSettingNotification(new WindowInteropHelper(window).Handle, ref guid, 0);
     }
 
     public void Stop() {
@@ -21,30 +46,46 @@ public class SessionMonitor {
 
     private void OnSessionSwitch(object sender, SessionSwitchEventArgs e) {
         if (e.Reason == SessionSwitchReason.SessionLock) {
-            Debug.WriteLine("Session lock detected");
             isSessionLocked = true;
             timer.Pause();
         }
         else if (e.Reason == SessionSwitchReason.SessionUnlock) {
-            Debug.WriteLine("Session unlock detected");
             isSessionLocked = false;
             
-            if (!isPowerSuspended)
+            if (!isPowerSuspended && !isDisplayOff)
                 timer.Resume();
         }
     }
 
     private void OnPowerModeChanged(object sender, PowerModeChangedEventArgs e) {
         if (e.Mode == PowerModes.Suspend) {
-            Debug.WriteLine("Power mode suspended");
             isPowerSuspended = true;
             timer.Pause();
         }
         else if (e.Mode == PowerModes.Resume) {
-            Debug.WriteLine("Power mode resumed");
             isPowerSuspended = false;
-            if (!isSessionLocked)
+            if (!isSessionLocked && !isDisplayOff)
                 timer.Resume();
         }
+    }
+    
+    private IntPtr handleHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled) {
+        if (msg == 536 && wParam.ToInt32() == 0x8013) { //536 is equal to WM_POWERBROADCAST according to Microsoft's doc, the other one I hope is right
+            var setting = Marshal.PtrToStructure<POWERBROADCAST_SETTING>(lParam);
+            
+            if (setting.PowerSetting != GUID_CONSOLE_DISPLAY_STATE)
+                return IntPtr.Zero;
+            
+            if (setting.Data == 0) {
+                isDisplayOff = true;
+                timer.Pause();
+            }
+            else if (setting.Data == 1) {
+                isDisplayOff =  false;
+                if (!isPowerSuspended && !isSessionLocked)
+                    timer.Resume();
+            }
+        }
+        return IntPtr.Zero;
     }
 }

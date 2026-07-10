@@ -3,6 +3,7 @@ using System.Windows.Interop;
 using Microsoft.Toolkit.Uwp.Notifications;
 using Application = System.Windows.Application;
 using MessageBox = System.Windows.Forms.MessageBox;
+using System.Windows.Threading;
 
 namespace ICare;
 
@@ -17,6 +18,13 @@ public partial class App : Application {
     private Timer appTimer;
     private SessionMonitor sessionMonitor;
     private Mutex? _mutex;
+    
+    public App() {
+        DispatcherUnhandledException += App_DispatcherUnhandledException;
+        SentrySdk.Init(o => o.Dsn = "https://d745c29ea1a403c15ce7348fd13a4c6c@o4511711865536512.ingest.de.sentry.io/4511711891292240");
+    }
+    
+    void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e) => SentrySdk.CaptureException(e.Exception);
 
     protected override void OnStartup(StartupEventArgs e) {
         _mutex = new Mutex(true, AppInfo.Name, out bool isNew);
@@ -32,7 +40,6 @@ public partial class App : Application {
         keyboard = new Keyboard(config);
         appTimer = new Timer(config, keyboard);
         dashboard = new Dashboard(config, appTimer, keyboard);
-        sessionMonitor = new SessionMonitor(appTimer);
 
         var helperWindow = new Window();
         helperWindow.Width = 0;
@@ -65,7 +72,11 @@ public partial class App : Application {
 
         var tray = new TrayIcon(CloseApp, dashboard);
         _ = appTimer.Start();
+        
         dashboard.Open();
+        
+        Application.Current.MainWindow = dashboard;
+        sessionMonitor = new SessionMonitor(Application.Current.MainWindow, appTimer);
     }
 
     public void CloseApp() {
