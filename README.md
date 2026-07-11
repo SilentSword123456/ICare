@@ -1,5 +1,6 @@
 # Description
-<img width="666" height="443" alt="image" src="https://github.com/user-attachments/assets/b0303323-21d5-46a2-88de-95a8f6e9b2e2" />
+<img width="3840" height="2880" alt="screenshot-studio-1783800451626" src="https://github.com/user-attachments/assets/2abea6fe-4037-44f9-a363-62ba34514316" />
+
 
 
 ICare is an app I build to remind (or force ^_^) me to take a break from the screen every 20min because my doctor said
