@@ -5,7 +5,8 @@
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{materialDesign:MaterialDesignFont}"
-        Title="ICare" Height="390" Width="540"
+        Title="ICare" Height="450" Width="680"
+        ResizeMode="CanMinimize"
         WindowStyle="SingleBorderWindow"
         Icon="pack://application:,,,/Assets/eye.ico">
     <materialDesign:DialogHost Identifier="RootDialog">
