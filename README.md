@@ -1,4 +1,6 @@
-# ICare
+# ICare 
+<img width="666" height="443" alt="image" src="https://github.com/user-attachments/assets/b0303323-21d5-46a2-88de-95a8f6e9b2e2" />
+
 
 ICare is an app I build to remind (or force ^_^) me to take a break from the screen every 20min because my doctor said
 so. I figured this would help other people, so I just started building it. It has a nice UI, it is VERY lightweight, and
