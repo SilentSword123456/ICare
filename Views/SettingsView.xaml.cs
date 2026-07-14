@@ -1,10 +1,16 @@
-﻿using System.Diagnostics;
+﻿using System.Net.Mime;
 using System.Windows.Controls;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
 using MaterialDesignThemes.Wpf;
 using DataObject = System.Windows.DataObject;
 using UserControl = System.Windows.Controls.UserControl;
+using System.Windows.Controls.Primitives;
+using System.Windows.Shapes;
+using Color = System.Windows.Media.Color;
+using ColorConverter = System.Windows.Media.ColorConverter;
 
 namespace ICare.Views;
 
@@ -80,10 +86,50 @@ public partial class SettingsView : UserControl {
 
     private void AutoStartToggle_Checked(object sender, RoutedEventArgs e) {
         StartupManager.Enable();
+        UpdateToggleVisual(AutoStartToggle);
     }
 
     private void AutoStartToggle_Unchecked(object sender, RoutedEventArgs e) {
         StartupManager.Disable();
+        UpdateToggleVisual(AutoStartToggle);
+    }
+
+    private void UpdateToggleVisual(ToggleButton toggle) {
+        toggle.ApplyTemplate();
+        var track = (Border)toggle.Template.FindName("Track", toggle);
+        var thumb = (Ellipse)toggle.Template.FindName("Thumb", toggle);
+
+        bool isChecked = toggle.IsChecked == true;
+
+        Color targetColor;
+        if (isChecked)
+            targetColor = (Color)ColorConverter.ConvertFromString("#006400");
+        else {
+            var themeBrush = (SolidColorBrush)System.Windows.Application.Current.Resources["ToggleTrackBrush"];
+            targetColor = themeBrush.Color;
+        }
+
+        var colorAnimation = new ColorAnimation {
+            To = targetColor,
+            Duration = TimeSpan.FromSeconds(0.2)
+        };
+        
+        if (track.Background.IsFrozen)
+            track.Background = track.Background.Clone();
+        
+        track.Background.BeginAnimation(SolidColorBrush.ColorProperty, colorAnimation);
+        
+        Thickness targetThickness = isChecked ? new Thickness(23, 0, 0, 0) :  new Thickness(3, 0, 0, 0);
+        
+        var thicknessAnimation = new ThicknessAnimation {
+            To = targetThickness,
+            Duration = TimeSpan.FromSeconds(0.2)
+        };
+        thumb.BeginAnimation(MarginProperty, thicknessAnimation);
+    }
+    
+    public void RefreshToggleVisual() {
+        UpdateToggleVisual(AutoStartToggle);
     }
 
     private void RecalculateWarningIcon() {

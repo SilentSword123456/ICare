@@ -4,6 +4,7 @@ using Microsoft.Toolkit.Uwp.Notifications;
 using Application = System.Windows.Application;
 using MessageBox = System.Windows.Forms.MessageBox;
 using System.Windows.Threading;
+using MaterialDesignThemes.Wpf;
 
 namespace ICare;
 
@@ -18,6 +19,9 @@ public partial class App : Application {
     private Timer appTimer;
     private SessionMonitor sessionMonitor;
     private Mutex? _mutex;
+    private PaletteHelper paletteHelper;
+    private MaterialDesignThemes.Wpf.Theme theme;
+    private ResourceDictionary currentThemeDictionary;
     
     public App() {
         DispatcherUnhandledException += App_DispatcherUnhandledException;
@@ -40,6 +44,8 @@ public partial class App : Application {
         keyboard = new Keyboard(config);
         appTimer = new Timer(config, keyboard);
         dashboard = new Dashboard(config, appTimer, keyboard);
+        paletteHelper = new PaletteHelper();
+        theme = paletteHelper.GetTheme();
 
         var helperWindow = new Window();
         helperWindow.Width = 0;
@@ -67,7 +73,9 @@ public partial class App : Application {
                     break;
             }
         };
-
+        
+        setTheme(config.Theme);
+        
         _cts = new CancellationTokenSource();
 
         var tray = new TrayIcon(CloseApp, dashboard);
@@ -82,5 +90,27 @@ public partial class App : Application {
     public void CloseApp() {
         sessionMonitor.Stop();
         _cts.Cancel();
+    }
+
+    public void setTheme(Theme targetTheme) {
+        if (targetTheme == Theme.Light)
+            theme.SetBaseTheme(BaseTheme.Light);
+        else
+            theme.SetBaseTheme(BaseTheme.Dark);
+        
+        paletteHelper.SetTheme(theme);
+        applyThemeDictionary(targetTheme);
+    }
+    
+    private void applyThemeDictionary(Theme targetTheme) {
+        var newDictionary = new ResourceDictionary();
+        newDictionary.Source = new Uri(targetTheme == Theme.Light ? "pack://application:,,,/Themes/Light.xaml" : "pack://application:,,,/Themes/Dark.xaml", UriKind.Absolute);
+
+        if (currentThemeDictionary != null)
+            Application.Current.Resources.MergedDictionaries.Remove(currentThemeDictionary);
+
+        Application.Current.Resources.MergedDictionaries.Add(newDictionary);
+
+        currentThemeDictionary = newDictionary;
     }
 }

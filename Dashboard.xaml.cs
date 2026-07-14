@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Shapes;
 using ICare.Views;
 
 namespace ICare;
@@ -26,12 +27,16 @@ public partial class Dashboard : Window {
     }
 
     private void NavOverview_Click(object sender, RoutedEventArgs e) {
+        if (ContentArea.Content is OverviewView overviewView)
+            return;
         NavigateTo(new OverviewView(config, timer));
         NavOverview.Style = (Style)FindResource("NavButtonActive");
         NavSettings.Style = (Style)FindResource("NavButton");
     }
 
     private void NavSettings_Click(object sender, RoutedEventArgs e) {
+        if (ContentArea.Content is SettingsView settingsView)
+            return;
         NavigateTo(new SettingsView(config, timer.Restart, keyboard.ReloadHotkey));
         NavSettings.Style = (Style)FindResource("NavButtonActive");
         NavOverview.Style = (Style)FindResource("NavButton");
@@ -40,6 +45,24 @@ public partial class Dashboard : Window {
     protected override void OnClosing(System.ComponentModel.CancelEventArgs e) {
         e.Cancel = true;
         Hide();
+    }
+
+    private void SwitchTheme(object sender, RoutedEventArgs e) {
+        config.Theme = config.Theme == Theme.Light ? Theme.Dark : Theme.Light;
+        
+        var fadeOut = new System.Windows.Media.Animation.DoubleAnimation(1, 0, TimeSpan.FromMilliseconds(150));
+        fadeOut.Completed += (s, args) => {
+            ((App)System.Windows.Application.Current).setTheme(config.Theme);
+
+            if (ContentArea.Content is SettingsView settingsView) {
+                settingsView.RefreshToggleVisual();
+            }
+
+            var fadeIn = new System.Windows.Media.Animation.DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(150));
+            ThemeIconPath.BeginAnimation(OpacityProperty, fadeIn);
+        };
+
+        ThemeIconPath.BeginAnimation(OpacityProperty, fadeOut);
     }
 
     public void Open() {

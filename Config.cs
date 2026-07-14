@@ -64,6 +64,15 @@ public class Config {
         }
     }
 
+    private Theme _theme;
+    public Theme Theme {
+        get => _theme;
+        set {
+            _theme = value;
+            Save();
+        }
+    }
+
     private static string ConfigPath => Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
         AppInfo.Name,
@@ -77,6 +86,7 @@ public class Config {
         _breakStatSec = 0;
         _breakMessage = "Time to rest your eyes";
         _timesSkipped = 0;
+        _theme = AppInfo.SystemTheme;
         Directory.CreateDirectory(Path.GetDirectoryName(ConfigPath)!);
     }
 
@@ -87,6 +97,7 @@ public class Config {
         BreakStatSec = 0;
         BreakMessage = "Time to rest your eyes";
         TimesSkipped = 0;
+        Theme = AppInfo.SystemTheme;
     }
 
     public void Save() {
@@ -105,6 +116,7 @@ public class Config {
             _breakStatSec = loaded.BreakStatSec;
             _breakMessage = loaded.BreakMessage;
             _timesSkipped = loaded.TimesSkipped;
+            _theme = loaded.Theme;
         }
         catch (FileNotFoundException e) {
             Console.WriteLine("Config file not found, trying to generate it!");

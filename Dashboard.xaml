@@ -16,7 +16,7 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Border Grid.Column="0" Background="#EDE8E0" Padding="12,24,12,24">
+            <Border Grid.Column="0" Background="{DynamicResource SurfaceBrush}" Padding="12,24,12,24">
                 <StackPanel>
                     <Button x:Name="NavOverview"
                             Click="NavOverview_Click"
@@ -42,6 +42,22 @@
                     </Button>
                 </StackPanel>
             </Border>
+            
+            <Button Grid.Column="0"
+                    x:Name="ThemeIconPath"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom"
+                    Click="SwitchTheme"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    materialDesign:RippleAssist.IsDisabled="True"
+                    Margin="0,0,0,8">
+                <Path Data="{DynamicResource SwitchThemeIcon}"
+                      Fill="{DynamicResource ThemeIconBrush}"
+                      Width="24" Height="24"
+                      Stretch="Uniform" />
+                
+            </Button>
 
             <ContentControl x:Name="ContentArea" Grid.Column="1" />
         </Grid>
