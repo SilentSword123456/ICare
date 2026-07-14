@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Runtime.InteropServices;
+using System.Windows;
 using System.Windows.Interop;
 using Microsoft.Toolkit.Uwp.Notifications;
 using Application = System.Windows.Application;
@@ -74,7 +75,7 @@ public partial class App : Application {
             }
         };
         
-        setTheme(config.Theme);
+        SetTheme(config.Theme);
         
         _cts = new CancellationTokenSource();
 
@@ -82,6 +83,7 @@ public partial class App : Application {
         _ = appTimer.Start();
         
         dashboard.Open();
+        UpdateTitleBarTheme(dashboard, config.Theme ==  Theme.Dark);
         
         Application.Current.MainWindow = dashboard;
         sessionMonitor = new SessionMonitor(Application.Current.MainWindow, appTimer);
@@ -92,17 +94,31 @@ public partial class App : Application {
         _cts.Cancel();
     }
 
-    public void setTheme(Theme targetTheme) {
+    public void SetTheme(Theme targetTheme) {
         if (targetTheme == Theme.Light)
             theme.SetBaseTheme(BaseTheme.Light);
         else
             theme.SetBaseTheme(BaseTheme.Dark);
         
         paletteHelper.SetTheme(theme);
-        applyThemeDictionary(targetTheme);
+        ApplyThemeDictionary(targetTheme);
+        
+        if (dashboard != null)
+            UpdateTitleBarTheme(dashboard, config.Theme ==  Theme.Dark);
     }
     
-    private void applyThemeDictionary(Theme targetTheme) {
+    [DllImport("dwmapi.dll")]
+    private static extern int DwmSetWindowAttribute(IntPtr hwnd, int attr, ref int attrValue, int attrSize);
+
+    private void UpdateTitleBarTheme(Window? window, bool isDark) {
+        if (window == null) 
+            return;
+        var hwnd = new WindowInteropHelper(window).Handle;
+        int darkMode = isDark ? 1 : 0;
+        DwmSetWindowAttribute(hwnd, 20, ref darkMode, sizeof(int));
+    }
+    
+    private void ApplyThemeDictionary(Theme targetTheme) {
         var newDictionary = new ResourceDictionary();
         newDictionary.Source = new Uri(targetTheme == Theme.Light ? "pack://application:,,,/Themes/Light.xaml" : "pack://application:,,,/Themes/Dark.xaml", UriKind.Absolute);
 

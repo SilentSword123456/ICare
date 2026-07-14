@@ -52,7 +52,7 @@ public partial class Dashboard : Window {
         
         var fadeOut = new System.Windows.Media.Animation.DoubleAnimation(1, 0, TimeSpan.FromMilliseconds(150));
         fadeOut.Completed += (s, args) => {
-            ((App)System.Windows.Application.Current).setTheme(config.Theme);
+            ((App)System.Windows.Application.Current).SetTheme(config.Theme);
 
             if (ContentArea.Content is SettingsView settingsView) {
                 settingsView.RefreshToggleVisual();
