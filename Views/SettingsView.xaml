@@ -9,17 +9,25 @@
                    HorizontalAlignment="Center"
                    Foreground="{DynamicResource TextPrimaryBrush}"
                    FontSize="33"
-                   FontWeight="Bold" />
+                   FontWeight="Bold" 
+                   Margin="0,0,0,10"/>
         <Grid HorizontalAlignment="Center">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200" />
                 <ColumnDefinition Width="200" />
             </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100"/>
+                <RowDefinition Height="100"/>
+                <RowDefinition Height="100"/>
+            </Grid.RowDefinitions>
 
-            <StackPanel Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
-                
 
-                <TextBlock Text="Work duration" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="12" Margin="0,0,0,6" />
+            <StackPanel Grid.Column="0" Grid.Row="0" VerticalAlignment="Top" HorizontalAlignment="Left">
+                <TextBlock Text="Work duration"
+                           Foreground="{DynamicResource TextSecondaryBrush}" 
+                           FontSize="12" 
+                           Margin="0,0,0,6" />
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                     <TextBox x:Name="WorkBox" Style="{StaticResource StyledNumberBox}"
                              Width="50"
@@ -28,8 +36,11 @@
                     <TextBlock Text="minutes" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="13"
                                VerticalAlignment="Center" Margin="10,0,0,0" />
                 </StackPanel>
+            </StackPanel>
 
-                <TextBlock Text="Break duration" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="12" Margin="0,24,0,6" />
+            <StackPanel Grid.Column="0" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Left">
+                <TextBlock Text="Break duration"
+                           Foreground="{DynamicResource TextSecondaryBrush}" FontSize="12" Margin="0,4,0,6" />
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                     <TextBox x:Name="BreakBox" Style="{StaticResource StyledNumberBox}"
                              Width="50"
@@ -57,21 +68,29 @@
 
                         <Rectangle Fill="Transparent" />
                     </Grid>
-
                 </StackPanel>
+            </StackPanel>
 
-                <TextBlock Text="Skip hotkey" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="12" Margin="0,24,0,6" />
+            <StackPanel Grid.Column="0" Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Left">
+                <TextBlock Text="Skip hotkey"
+                           Foreground="{DynamicResource TextSecondaryBrush}" FontSize="12" Margin="0,4,0,6" />
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <Border Background="{DynamicResource SettingsBackgroundComponentsBrush}" BorderBrush="{DynamicResource ToggleTrackBrush}" BorderThickness="1"
+                    <Border Background="{DynamicResource SettingsBackgroundComponentsBrush}"
+                            BorderBrush="{DynamicResource ToggleTrackBrush}" BorderThickness="1"
                             CornerRadius="10" Padding="6,10">
-                        <TextBlock Text="Ctrl" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="12" FontWeight="SemiBold" />
+                        <TextBlock Text="Ctrl" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="12"
+                                   FontWeight="SemiBold" />
                     </Border>
-                    <TextBlock Text="+" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="13" VerticalAlignment="Center" Margin="4,0" />
-                    <Border Background="{DynamicResource SettingsBackgroundComponentsBrush}" BorderBrush="{DynamicResource ToggleTrackBrush}" BorderThickness="1"
+                    <TextBlock Text="+" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="13"
+                               VerticalAlignment="Center" Margin="4,0" />
+                    <Border Background="{DynamicResource SettingsBackgroundComponentsBrush}"
+                            BorderBrush="{DynamicResource ToggleTrackBrush}" BorderThickness="1"
                             CornerRadius="10" Padding="6,10">
-                        <TextBlock Text="Shift" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="12" FontWeight="SemiBold" />
+                        <TextBlock Text="Shift" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="12"
+                                   FontWeight="SemiBold" />
                     </Border>
-                    <TextBlock Text="+" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="13" VerticalAlignment="Center" Margin="4,0" />
+                    <TextBlock Text="+" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="13"
+                               VerticalAlignment="Center" Margin="4,0" />
                     <Border BorderBrush="{DynamicResource TextPrimaryBrush}" BorderThickness="1" CornerRadius="6">
                         <TextBox x:Name="HotkeyBox" Style="{StaticResource StyledNumberBox}"
                                  Width="50" HorizontalContentAlignment="Center"
@@ -80,8 +99,11 @@
                 </StackPanel>
             </StackPanel>
 
-            <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <TextBlock Text="Start automatically" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="12" Margin="0,0,0,6" />
+            <StackPanel Grid.Column="1" Grid.Row="0" VerticalAlignment="Top" HorizontalAlignment="Left">
+                <TextBlock Text="Start automatically" 
+                           Foreground="{DynamicResource TextSecondaryBrush}" 
+                           FontSize="12" 
+                           Margin="0,0,0,6" />
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                     <ToggleButton x:Name="AutoStartToggle"
                                   Style="{StaticResource PillToggleButton}"
@@ -89,42 +111,46 @@
                                   Unchecked="AutoStartToggle_Unchecked" />
                     <!-- TODO: make it be a closed/opened eye instead of a simple toggle -->
                 </StackPanel>
+            </StackPanel>
 
 
-                <!-- <TextBlock Text="Break Message" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="12" Margin="0,24,0,6" />
-                <TextBox x:Name="BreakMessage" Style="{StaticResource StyledNumberBox}"
-                         TextChanged="BreakMessage_TextChanged"
-                         Width="160"
-                         MinHeight="40" MaxHeight="50"
-                         TextWrapping="Wrap"
-                         AcceptsReturn="True"
-                         VerticalScrollBarVisibility="Auto"
-                         VerticalContentAlignment="Top"
-                         HorizontalAlignment="Left" /> -->
+            <!-- <TextBlock Text="Break Message" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="12" Margin="0,24,0,6" />
+            <TextBox x:Name="BreakMessage" Style="{StaticResource StyledNumberBox}"
+                     TextChanged="BreakMessage_TextChanged"
+                     Width="160"
+                     MinHeight="40" MaxHeight="50"
+                     TextWrapping="Wrap"
+                     AcceptsReturn="True"
+                     VerticalScrollBarVisibility="Auto"
+                     VerticalContentAlignment="Top"
+                     HorizontalAlignment="Left" /> -->
                 
-                <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left">
-                    <TextBlock Text="Theme" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="12" Margin="0,24,0,6" />
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <ToggleButton x:Name="ThemePillButton"
-                                      Style="{DynamicResource ThemeSquareToggle}"
-                                      HorizontalAlignment="Center"
-                                      VerticalAlignment="Bottom"
-                                      Click="SwitchTheme"
-                                      Background="Transparent"
-                                      materialDesign:RippleAssist.IsDisabled="True"
-                                      Margin="0,0,0,8">
-                            <Path Data="{DynamicResource SwitchThemeIcon}"
-                                  Fill="{DynamicResource ThemeIconBrush}"
-                                  Width="24" Height="24"
-                                  Stretch="Uniform" />
-                
-                        </ToggleButton>
-                    </StackPanel>
-                </StackPanel>
-
-                <TextBlock Text="Restore app defaults" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="12" Margin="0,24,0,6" />
+            <StackPanel Grid.Column="1" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Left">
+                <TextBlock Text="Theme" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="12" Margin="0,4,0,6" />
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <Border Background="{DynamicResource SettingsBackgroundComponentsBrush}" BorderBrush="{DynamicResource ToggleTrackBrush}" BorderThickness="1"
+                    <ToggleButton x:Name="ThemePillButton"
+                                  Style="{DynamicResource ThemeSquareToggle}"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Bottom"
+                                  Click="SwitchTheme"
+                                  Background="Transparent"
+                                  materialDesign:RippleAssist.IsDisabled="True"
+                                  Margin="0,0,0,8">
+                        <Path Data="{DynamicResource SwitchThemeIcon}"
+                              Fill="{DynamicResource ThemeIconBrush}"
+                              Width="24" Height="24"
+                              Stretch="Uniform" />
+            
+                    </ToggleButton>
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Left" >
+                <TextBlock Text="Restore app defaults"
+                           Foreground="{DynamicResource TextSecondaryBrush}" FontSize="12" Margin="0,4,0,6" />
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Border Background="{DynamicResource SettingsBackgroundComponentsBrush}"
+                            BorderBrush="{DynamicResource ToggleTrackBrush}" BorderThickness="1"
                             CornerRadius="10" Padding="65,5">
                         <Button x:Name="ResetAppSettings"
                                 Click="ResetAppSettings_Click"
