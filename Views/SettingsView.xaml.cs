@@ -9,6 +9,7 @@ using DataObject = System.Windows.DataObject;
 using UserControl = System.Windows.Controls.UserControl;
 using System.Windows.Controls.Primitives;
 using System.Windows.Shapes;
+using Application = System.Windows.Application;
 using Color = System.Windows.Media.Color;
 using ColorConverter = System.Windows.Media.ColorConverter;
 
@@ -31,6 +32,8 @@ public partial class SettingsView : UserControl {
         AutoStartToggle.IsChecked = StartupManager.IsEnabled();
         //BreakMessage.Text = config.BreakMessage;
         ThemePillButton.IsChecked = config.Theme == Theme.Dark;
+        if (((App)Application.Current).IsPortable)
+            UpdateButton.Visibility = Visibility.Collapsed;
         
         DataObject.AddPastingHandler(WorkBox, OnPaste);
         DataObject.AddPastingHandler(BreakBox, OnPaste);
@@ -171,5 +174,9 @@ public partial class SettingsView : UserControl {
         };
 
         ThemePillButton.BeginAnimation(OpacityProperty, fadeOut);
+    }
+
+    private async void StartUpdate(object sender, RoutedEventArgs e) {
+        await ((App)Application.Current).CheckForUpdatesAsync();
     }
 }

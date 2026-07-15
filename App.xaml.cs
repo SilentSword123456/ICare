@@ -6,6 +6,8 @@ using Application = System.Windows.Application;
 using MessageBox = System.Windows.Forms.MessageBox;
 using System.Windows.Threading;
 using MaterialDesignThemes.Wpf;
+using Velopack;
+using Velopack.Sources;
 
 namespace ICare;
 
@@ -23,6 +25,17 @@ public partial class App : Application {
     private PaletteHelper paletteHelper;
     private MaterialDesignThemes.Wpf.Theme theme;
     private ResourceDictionary currentThemeDictionary;
+    private UpdateManager updateManager;
+    
+    public bool IsPortable => updateManager.IsPortable;
+    
+    [STAThread]
+    public static void Main(string[] args) {
+        VelopackApp.Build().Run();
+        var app = new App();
+        app.InitializeComponent();
+        app.Run();
+    }
     
     public App() {
         DispatcherUnhandledException += App_DispatcherUnhandledException;
@@ -47,6 +60,8 @@ public partial class App : Application {
         dashboard = new Dashboard(config, appTimer, keyboard);
         paletteHelper = new PaletteHelper();
         theme = paletteHelper.GetTheme();
+        
+        updateManager = new UpdateManager(new GithubSource("https://github.com/SilentSword/ICare", null, false));
 
         var helperWindow = new Window();
         helperWindow.Width = 0;
@@ -128,5 +143,14 @@ public partial class App : Application {
         Application.Current.Resources.MergedDictionaries.Add(newDictionary);
 
         currentThemeDictionary = newDictionary;
+    }
+    
+    public async Task CheckForUpdatesAsync() {
+        var newVersion = await updateManager.CheckForUpdatesAsync();
+        if (newVersion == null)
+            return;
+
+        await updateManager.DownloadUpdatesAsync(newVersion);
+        updateManager.ApplyUpdatesAndRestart(newVersion);
     }
 }
