@@ -61,7 +61,7 @@ public partial class App : Application {
         paletteHelper = new PaletteHelper();
         theme = paletteHelper.GetTheme();
         
-        updateManager = new UpdateManager(new GithubSource("https://github.com/SilentSword/ICare", null, false));
+        updateManager = new UpdateManager(new GithubSource("'https://github.com/SilentSword123456/ICare", null, false));
 
         var helperWindow = new Window();
         helperWindow.Width = 0;
