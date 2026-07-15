@@ -10,9 +10,8 @@ it does its job.
 
 # Instalation
 
-Head over to https://github.com/SilentSword123456/ICare/releases/latest. Download it, and then run it (it doesn't need
-Admin privileges). You can access the dashboard via the system-tray icon by just clicking on it and stop the app by
-right-clicking the icon and pressing quit.
+You can download [the installer](https://github.com/SilentSword123456/ICare/releases/latest/download/ICare-win-Setup.exe) or the [portable version](https://github.com/SilentSword123456/ICare/releases/latest/download/ICare.exe) from the release page. Once you download and run it (it doesn't need
+Admin privileges) the dashboard will open and you can get back to working. You can access the dashboard via the system-tray icon by just clicking on it and stop the app by right-clicking the icon and pressing quit.
 
 # How it works
 
