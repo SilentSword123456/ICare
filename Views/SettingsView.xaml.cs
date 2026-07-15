@@ -39,8 +39,10 @@ public partial class SettingsView : UserControl {
         AutoStartToggle.IsChecked = StartupManager.IsEnabled();
         //BreakMessage.Text = config.BreakMessage;
         ThemePillButton.IsChecked = config.Theme == Theme.Dark;
-        if (((App)Application.Current).IsPortable)
+        if (((App)Application.Current).IsPortable) {
             UpdateButton.Visibility = Visibility.Collapsed;
+            UpdateButtonText.Visibility = Visibility.Collapsed;
+        }
         UpdateUpdateState(((App)Application.Current).UpdateState);
         
         DataObject.AddPastingHandler(WorkBox, OnPaste);
