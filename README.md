@@ -32,3 +32,5 @@ short issue).
 ICare uses a config file located in AppData to store its configuration, and don't worry, it automatically saves on any
 change when editing the settings, you don't need to press anything.
 
+![Hackatime Badge](https://hackatime.hackclub.com/api/v1/badge/U0A531VD30C/SilentSword123456/ICare)
+
