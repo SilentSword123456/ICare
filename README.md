@@ -23,6 +23,9 @@ The app works by keeping track of the time spent at the computer and triggering 
 disabled (You can use ctrl+alt+delete to exit if something goes wrong) and a countdown with a break message will appear
 on the main screen, while the other screens should display just a nice photo.
 
+<img width="5760" height="4320" alt="screenshot-studio-1784117747951" src="https://github.com/user-attachments/assets/908a939e-8213-456c-bd54-f5040ae5e4ee" />
+
+
 If you are in a game or doing something very important, and you can't use the mouse to dismiss the timer from the
 notification, you can use the shortcut ``ctrl+shift+Q`` (by default) to entirely skip the next break. The timer will continue,
 but once it ends it will just continue without starting the break. You can customize the hotkey by choosing any from
