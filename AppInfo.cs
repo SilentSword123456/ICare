@@ -6,6 +6,7 @@ public class AppInfo {
     public const string Name = "ICare";
     
     public static Theme SystemTheme => GetTheme();
+    public static Version Version => ((App)System.Windows.Application.Current).Version.Version;
 
     private static Theme GetTheme() {
         const string keyPath = @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";

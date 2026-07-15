@@ -1,0 +1,42 @@
+﻿<UserControl x:Class="ICare.Views.ConfirmUpdate"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:"
+             MinWidth="320"
+             MaxWidth="380">
+    
+    <StackPanel Margin="24">
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+            <materialDesign:PackIcon Kind="Update"
+                                     Width="22" Height="22"
+                                     Foreground="DodgerBlue"
+                                     VerticalAlignment="Center" />
+            <TextBlock Text="Apply update now?"
+                       FontSize="16" FontWeight="Medium"
+                       Margin="10,0,0,0"
+                       VerticalAlignment="Center" />
+        </StackPanel>
+
+        <TextBlock Text="This will restart the application."
+                   TextWrapping="Wrap"
+                   Foreground="#6B6B6B"
+                   FontSize="13"
+                   Margin="0,0,0,20" />
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Cancel"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    IsCancel="True"
+                    Margin="0,0,8,0"
+                    Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
+                    CommandParameter="{x:Static local:ResetDialogResult.Cancel}" />
+            <Button Content="Restart"
+                    Style="{StaticResource DangerFilledButton}"
+                    Background="DodgerBlue"
+                    BorderBrush="DodgerBlue"
+                    Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
+                    CommandParameter="{x:Static local:ResetDialogResult.Confirm}" />
+        </StackPanel>
+    </StackPanel>
+</UserControl>

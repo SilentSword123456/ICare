@@ -9,6 +9,8 @@ using DataObject = System.Windows.DataObject;
 using UserControl = System.Windows.Controls.UserControl;
 using System.Windows.Controls.Primitives;
 using System.Windows.Shapes;
+using ABI.Windows.Foundation.Diagnostics;
+using ICare.Models;
 using Application = System.Windows.Application;
 using Color = System.Windows.Media.Color;
 using ColorConverter = System.Windows.Media.ColorConverter;
@@ -20,10 +22,10 @@ public partial class SettingsView : UserControl {
     private Action restartTimer;
     private Action reloadHotkey;
 
-    public SettingsView(Config _config, Action _restartTimer, Action _reloadHotkey) {
-        config = _config;
-        restartTimer = _restartTimer;
-        reloadHotkey = _reloadHotkey;
+    public SettingsView(Config config, Action restartTimer, Action reloadHotkey) {
+        this.config = config;
+        this.restartTimer = restartTimer;
+        this.reloadHotkey = reloadHotkey;
         InitializeComponent();
         WorkBox.Text = $"{config.WorkSec / 60}";
         BreakBox.Text = $"{config.BreakSec}";
@@ -34,9 +36,12 @@ public partial class SettingsView : UserControl {
         ThemePillButton.IsChecked = config.Theme == Theme.Dark;
         if (((App)Application.Current).IsPortable)
             UpdateButton.Visibility = Visibility.Collapsed;
+        UpdateUpdateState(((App)Application.Current).UpdateState);
         
         DataObject.AddPastingHandler(WorkBox, OnPaste);
         DataObject.AddPastingHandler(BreakBox, OnPaste);
+        
+        ((App)Application.Current).UpdateStateChanged += UpdateUpdateState;
     }
 
     private void WorkBox_TextChanged(object sender, TextChangedEventArgs e) {
@@ -175,8 +180,39 @@ public partial class SettingsView : UserControl {
 
         ThemePillButton.BeginAnimation(OpacityProperty, fadeOut);
     }
+    
+    private async void UpdateAppClick(object sender, RoutedEventArgs e) {
+        switch (((App)Application.Current).UpdateState){
+            case UpdateState.Idle: {
+                await ((App)Application.Current).CheckForUpdates();
+                break;
+            }
+            case UpdateState.NotFound: {
+                await ((App)Application.Current).CheckForUpdates();
+                break;
+            }
+            case UpdateState.Available: {
+                await ((App)Application.Current).DownloadUpdate();
+                break;
+            }
+            case UpdateState.ReadyToInstall:{
+                var result = await DialogHost.Show(new ConfirmUpdate(), "RootDialog");
 
-    private async void StartUpdate(object sender, RoutedEventArgs e) {
-        await ((App)Application.Current).CheckForUpdatesAsync();
+                if (result is ResetDialogResult.Confirm) 
+                    ((App)Application.Current).ApplyUpdates();
+
+                break;
+            }
+        }
+    }
+
+    private void UpdateUpdateState(UpdateState state) {
+        switch (state) {
+            case UpdateState.Idle: UpdateButtonText.Text = "[Check for updates]"; break;
+            case UpdateState.NotFound: UpdateButtonText.Text = "[No updates found, click to check again]"; break;
+            case UpdateState.Available: UpdateButtonText.Text = "[Found new version, click to install]"; break;
+            case UpdateState.Checking: UpdateButtonText.Text = "[Checking...]"; break;
+            case UpdateState.ReadyToInstall: UpdateButtonText.Text = "[Download finished, click to restart]"; break;
+        }
     }
 }

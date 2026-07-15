@@ -1,13 +1,16 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 using Microsoft.Toolkit.Uwp.Notifications;
 using Application = System.Windows.Application;
 using MessageBox = System.Windows.Forms.MessageBox;
 using System.Windows.Threading;
+using ICare.Models;
 using MaterialDesignThemes.Wpf;
 using Velopack;
 using Velopack.Sources;
+using Velopack.Locators;
 
 namespace ICare;
 
@@ -28,6 +31,20 @@ public partial class App : Application {
     private UpdateManager updateManager;
     
     public bool IsPortable => updateManager.IsPortable;
+    public SemanticVersion? Version => updateManager.CurrentVersion;
+
+    public event Action<UpdateState>? UpdateStateChanged;
+    private UpdateState _updateState;
+    public UpdateState UpdateState {
+        get => _updateState;
+        set {
+            _updateState = value;
+            UpdateStateChanged?.Invoke(value);
+        }
+    }
+
+    public UpdateInfo? PendingUpdate;
+    
     
     [STAThread]
     public static void Main(string[] args) {
@@ -61,7 +78,19 @@ public partial class App : Application {
         paletteHelper = new PaletteHelper();
         theme = paletteHelper.GetTheme();
         
-        updateManager = new UpdateManager(new GithubSource("https://github.com/SilentSword123456/ICare", null, false));
+        #if DEBUG
+                var testLocator = new TestVelopackLocator(
+                    appId: "ICare",
+                    version: "1.0.0",
+                    packagesDir: Path.Combine(Path.GetTempPath(), "ICareTestPackages"));
+
+                updateManager = new UpdateManager(
+                    new SimpleFileSource(new DirectoryInfo(@"C:\Users\SilentSword\ICareTestUpdates")),
+                    null,
+                    testLocator);
+        #else
+                updateManager = new UpdateManager(new GithubSource("https://github.com/SilentSword123456/ICare", null, false));
+        #endif
 
         var helperWindow = new Window();
         helperWindow.Width = 0;
@@ -102,6 +131,8 @@ public partial class App : Application {
         
         Application.Current.MainWindow = dashboard;
         sessionMonitor = new SessionMonitor(Application.Current.MainWindow, appTimer);
+
+        _ = CheckForUpdates();
     }
 
     public void CloseApp() {
@@ -144,13 +175,25 @@ public partial class App : Application {
 
         currentThemeDictionary = newDictionary;
     }
-    
-    public async Task CheckForUpdatesAsync() {
-        var newVersion = await updateManager.CheckForUpdatesAsync();
-        if (newVersion == null)
-            return;
 
-        await updateManager.DownloadUpdatesAsync(newVersion);
-        updateManager.ApplyUpdatesAndRestart(newVersion);
+    public async Task CheckForUpdates() {
+        UpdateState = UpdateState.Checking;
+        PendingUpdate = await updateManager.CheckForUpdatesAsync();
+        UpdateState = PendingUpdate != null ? UpdateState.Available : UpdateState.NotFound;
     }
+    
+    public async Task DownloadUpdate() {
+        if (PendingUpdate == null)
+            return;
+        UpdateState = UpdateState.Downloading;
+        await updateManager.DownloadUpdatesAsync(PendingUpdate);
+        UpdateState = UpdateState.ReadyToInstall;
+    }
+
+    public void ApplyUpdates() {
+        if  (PendingUpdate == null)
+            return;
+        updateManager.ApplyUpdatesAndRestart(PendingUpdate);
+    }
+        
 }
