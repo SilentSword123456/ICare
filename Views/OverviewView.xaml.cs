@@ -37,7 +37,7 @@ public partial class OverviewView : UserControl {
         else {
             SkipStatusLabel.Text = "Scheduled";
             SkipStatusLabel.Foreground = new SolidColorBrush(Colors.DimGray);
-            TimerArc.Stroke = new SolidColorBrush(Colors.Magenta);
+            TimerArc.Stroke = new SolidColorBrush(Colors.DarkGreen);
         }
 
         WorkLabel.Text = $"{config.WorkSec / 60}";
