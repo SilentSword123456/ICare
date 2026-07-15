@@ -18,7 +18,7 @@
                                  Stroke="{DynamicResource OverviewEllipseBrush}" StrokeThickness="8"
                                  Fill="Transparent" />
                         <Path x:Name="TimerArc"
-                              Stroke="#2D5A3D" StrokeThickness="8"
+                              Stroke="#9E23DB" StrokeThickness="8"
                               StrokeStartLineCap="Round" StrokeEndLineCap="Round"
                               Fill="Transparent" />
                     </Canvas>
