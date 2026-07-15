@@ -47,23 +47,7 @@ public partial class Dashboard : Window {
         Hide();
     }
 
-    private void SwitchTheme(object sender, RoutedEventArgs e) {
-        config.Theme = config.Theme == Theme.Light ? Theme.Dark : Theme.Light;
-        
-        var fadeOut = new System.Windows.Media.Animation.DoubleAnimation(1, 0, TimeSpan.FromMilliseconds(150));
-        fadeOut.Completed += (s, args) => {
-            ((App)System.Windows.Application.Current).SetTheme(config.Theme);
-
-            if (ContentArea.Content is SettingsView settingsView) {
-                settingsView.RefreshToggleVisual();
-            }
-
-            var fadeIn = new System.Windows.Media.Animation.DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(150));
-            ThemeIconPath.BeginAnimation(OpacityProperty, fadeIn);
-        };
-
-        ThemeIconPath.BeginAnimation(OpacityProperty, fadeOut);
-    }
+    
 
     public void Open() {
         if (IsVisible)

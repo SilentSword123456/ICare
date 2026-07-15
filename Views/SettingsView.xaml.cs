@@ -29,7 +29,8 @@ public partial class SettingsView : UserControl {
         RecalculateWarningIcon();
         HotkeyBox.Text = System.Windows.Input.KeyInterop.KeyFromVirtualKey((int)config.HotkeyVK).ToString();
         AutoStartToggle.IsChecked = StartupManager.IsEnabled();
-        BreakMessage.Text = config.BreakMessage;
+        //BreakMessage.Text = config.BreakMessage;
+        ThemePillButton.IsChecked = config.Theme == Theme.Dark;
         
         DataObject.AddPastingHandler(WorkBox, OnPaste);
         DataObject.AddPastingHandler(BreakBox, OnPaste);
@@ -81,7 +82,7 @@ public partial class SettingsView : UserControl {
     }
 
     private void BreakMessage_TextChanged(object sender, TextChangedEventArgs e) {
-        config.BreakMessage = BreakMessage.Text;
+        //config.BreakMessage = BreakMessage.Text;
     }
 
     private void AutoStartToggle_Checked(object sender, RoutedEventArgs e) {
@@ -149,8 +150,26 @@ public partial class SettingsView : UserControl {
             StartupManager.Disable();
             AutoStartToggle.IsChecked = false;
             HotkeyBox.Text = System.Windows.Input.KeyInterop.KeyFromVirtualKey((int)config.HotkeyVK).ToString();
-            BreakMessage.Text = config.BreakMessage;
+            //BreakMessage.Text = config.BreakMessage;
+            ThemePillButton.IsChecked = config.Theme == Theme.Dark;
+
         }
         
+    }
+    
+    private void SwitchTheme(object sender, RoutedEventArgs e) {
+        config.Theme = config.Theme == Theme.Light ? Theme.Dark : Theme.Light;
+        
+        var fadeOut = new System.Windows.Media.Animation.DoubleAnimation(1, 0, TimeSpan.FromMilliseconds(150));
+        fadeOut.Completed += (s, args) => {
+            ((App)System.Windows.Application.Current).SetTheme(config.Theme);
+            
+            RefreshToggleVisual();
+
+            var fadeIn = new System.Windows.Media.Animation.DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(150));
+            ThemePillButton.BeginAnimation(OpacityProperty, fadeIn);
+        };
+
+        ThemePillButton.BeginAnimation(OpacityProperty, fadeOut);
     }
 }

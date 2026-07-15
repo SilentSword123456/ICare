@@ -43,21 +43,7 @@
                 </StackPanel>
             </Border>
             
-            <Button Grid.Column="0"
-                    x:Name="ThemeIconPath"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Bottom"
-                    Click="SwitchTheme"
-                    Background="Transparent"
-                    BorderThickness="0"
-                    materialDesign:RippleAssist.IsDisabled="True"
-                    Margin="0,0,0,8">
-                <Path Data="{DynamicResource SwitchThemeIcon}"
-                      Fill="{DynamicResource ThemeIconBrush}"
-                      Width="24" Height="24"
-                      Stretch="Uniform" />
-                
-            </Button>
+            
 
             <ContentControl x:Name="ContentArea" Grid.Column="1" />
         </Grid>
