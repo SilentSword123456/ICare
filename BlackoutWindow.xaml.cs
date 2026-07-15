@@ -7,17 +7,19 @@ namespace ICare;
 public partial class BlackoutWindow : Window {
     private static BitmapImage background;
     private static Theme? theme;
+    private Config config;
     
-    public BlackoutWindow() {
+    public BlackoutWindow(Config config) {
+        this.config = config;
         InitializeComponent();
         ApplyBackgroundForTheme();
     }
 
-    private void verifyBackground() {
-        if (theme != null && theme == AppInfo.SystemTheme)
+    private void VerifyBackground() {
+        if (theme != null && theme == config.Theme)
             return;
 
-        if (AppInfo.SystemTheme == Theme.Light) {
+        if (config.Theme == Theme.Light) {
             background = new BitmapImage(new Uri($"pack://application:,,,/{AppInfo.Name};component/Assets/background.png"));
             background.Freeze();
             theme = Theme.Light;
@@ -31,8 +33,7 @@ public partial class BlackoutWindow : Window {
     }
     
     private void ApplyBackgroundForTheme() {
-        verifyBackground();
-        
+        VerifyBackground();
         BackgroundImage.ImageSource = background;
     }
 
@@ -42,7 +43,7 @@ public partial class BlackoutWindow : Window {
 
         var windows = System.Windows.Forms.Screen.AllScreens
             .Select(screen => {
-                var window = new BlackoutWindow();
+                var window = new BlackoutWindow(config);
                 window.Left = screen.Bounds.Left;
                 window.Top = screen.Bounds.Top;
                 window.Width = screen.Bounds.Width;
