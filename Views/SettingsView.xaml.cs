@@ -1,4 +1,5 @@
 ﻿using System.Net.Mime;
+using System.Text;
 using System.Windows.Controls;
 using System.Windows;
 using System.Windows.Input;
@@ -9,6 +10,7 @@ using DataObject = System.Windows.DataObject;
 using UserControl = System.Windows.Controls.UserControl;
 using System.Windows.Controls.Primitives;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using ABI.Windows.Foundation.Diagnostics;
 using ICare.Models;
 using Application = System.Windows.Application;
@@ -21,6 +23,9 @@ public partial class SettingsView : UserControl {
     private Config config;
     private Action restartTimer;
     private Action reloadHotkey;
+    private DispatcherTimer dotsTimer = new DispatcherTimer();
+    private string dotsBaseText;
+    private int dotsCount;
 
     public SettingsView(Config config, Action restartTimer, Action reloadHotkey) {
         this.config = config;
@@ -42,6 +47,7 @@ public partial class SettingsView : UserControl {
         DataObject.AddPastingHandler(BreakBox, OnPaste);
         
         ((App)Application.Current).UpdateStateChanged += UpdateUpdateState;
+        dotsTimer.Interval = new TimeSpan(0, 0, 0, 0, 750);
     }
 
     private void WorkBox_TextChanged(object sender, TextChangedEventArgs e) {
@@ -207,13 +213,33 @@ public partial class SettingsView : UserControl {
     }
 
     private void UpdateUpdateState(UpdateState state) {
+        dotsTimer.Stop();
+        dotsTimer.Tick -= AnimateDots;
         switch (state) {
             case UpdateState.Idle: UpdateButtonText.Text = "[Check for updates]"; break;
             case UpdateState.NotFound: UpdateButtonText.Text = "[No updates found, click to check again]"; break;
-            case UpdateState.Downloading: UpdateButtonText.Text = "[Downloading...]"; break;
+            case UpdateState.Downloading: 
+                UpdateButtonText.Text = "[Downloading]";
+                dotsBaseText = "Downloading";
+                dotsCount = 0;
+                dotsTimer.Tick += AnimateDots;
+                dotsTimer.Start();
+                break;
             case UpdateState.Available: UpdateButtonText.Text = "[Found new version, click to install]"; break;
-            case UpdateState.Checking: UpdateButtonText.Text = "[Checking...]"; break;
+            case UpdateState.Checking: 
+                UpdateButtonText.Text = "[Checking]";
+                dotsBaseText = "Checking";
+                dotsCount = 0;
+                dotsTimer.Tick += AnimateDots;
+                dotsTimer.Start();
+                break;
             case UpdateState.ReadyToInstall: UpdateButtonText.Text = "[Download finished, click to restart]"; break;
+            default: UpdateButtonText.Text = "[Check for updates]"; break;
         }
+    }
+
+    private void AnimateDots(object? sender, EventArgs eventArgs) {
+        dotsCount = (dotsCount + 1) % 4;
+        UpdateButtonText.Text = ("[" + dotsBaseText + new string('.', dotsCount) + "]").ToString();
     }
 }
