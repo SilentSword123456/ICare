@@ -210,6 +210,7 @@ public partial class SettingsView : UserControl {
         switch (state) {
             case UpdateState.Idle: UpdateButtonText.Text = "[Check for updates]"; break;
             case UpdateState.NotFound: UpdateButtonText.Text = "[No updates found, click to check again]"; break;
+            case UpdateState.Downloading: UpdateButtonText.Text = "[Downloading...]"; break;
             case UpdateState.Available: UpdateButtonText.Text = "[Found new version, click to install]"; break;
             case UpdateState.Checking: UpdateButtonText.Text = "[Checking...]"; break;
             case UpdateState.ReadyToInstall: UpdateButtonText.Text = "[Download finished, click to restart]"; break;
