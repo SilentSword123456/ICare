@@ -11,21 +11,28 @@
                    FontSize="33"
                    FontWeight="Bold" 
                    Margin="0,26,0,10"/>
-        
-        <Button 
-            x:Name="UpdateButton"
-            DockPanel.Dock="Bottom"
-            HorizontalAlignment="Right"
-            Margin="0,0,10,10"
-            Padding="6,2"
-            Background="Transparent"
-            BorderThickness="0"
-            Click="UpdateAppClick">
-            <TextBlock 
-                x:Name="UpdateButtonText"
-                Text="[Check for updates]"
-                Foreground="{DynamicResource TextSecondaryBrush}"/>
-        </Button>
+
+        <Grid DockPanel.Dock="Bottom" Margin="0,0,0,10">
+            <Button
+                x:Name="UpdateButton"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Padding="6,2"
+                Background="Transparent"
+                BorderThickness="0"
+                Click="UpdateAppClick">
+                <TextBlock
+                    x:Name="UpdateButtonText"
+                    Text="[Check for updates]"
+                    Foreground="{DynamicResource TextSecondaryBrush}" />
+            </Button>
+            <TextBlock
+                x:Name="Version"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Text="v1.0.0"
+                Foreground="{DynamicResource TextSecondaryBrush}" />
+        </Grid>
         <Grid HorizontalAlignment="Center">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200" />

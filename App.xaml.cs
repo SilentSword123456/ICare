@@ -56,7 +56,19 @@ public partial class App : Application {
     
     public App() {
         DispatcherUnhandledException += App_DispatcherUnhandledException;
-        SentrySdk.Init(o => o.Dsn = "https://d745c29ea1a403c15ce7348fd13a4c6c@o4511711865536512.ingest.de.sentry.io/4511711891292240");
+        SentrySdk.Init(o =>
+        {
+            o.Dsn = "https://d745c29ea1a403c15ce7348fd13a4c6c@o4511711865536512.ingest.de.sentry.io/4511711891292240";
+
+        #if DEBUG
+            o.Environment = "development";
+            o.Debug = true;
+            o.TracesSampleRate = 1.0;
+        #else
+            o.Environment = "production";
+            o.Debug = false;
+        #endif
+        });
     }
     
     void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e) => SentrySdk.CaptureException(e.Exception);

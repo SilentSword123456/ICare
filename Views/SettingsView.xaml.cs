@@ -44,10 +44,12 @@ public partial class SettingsView : UserControl {
         AutoStartToggle.IsChecked = StartupManager.IsInRun();
         //BreakMessage.Text = config.BreakMessage;
         ThemePillButton.IsChecked = config.Theme == Theme.Dark;
+        
         if (((App)Application.Current).IsPortable) {
             UpdateButton.Visibility = Visibility.Collapsed;
             UpdateButtonText.Visibility = Visibility.Collapsed;
         }
+        
         UpdateUpdateState(((App)Application.Current).UpdateState);
         
         DataObject.AddPastingHandler(WorkBox, OnPaste);
@@ -55,6 +57,9 @@ public partial class SettingsView : UserControl {
         
         ((App)Application.Current).UpdateStateChanged += UpdateUpdateState;
         dotsTimer.Interval = new TimeSpan(0, 0, 0, 0, 750);
+
+        Version.Text = AppInfo.Version.ToString();
+        Console.WriteLine(AppInfo.Version.ToString());
     }
 
     private void WorkBox_TextChanged(object sender, TextChangedEventArgs e) {
