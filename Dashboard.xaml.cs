@@ -50,6 +50,9 @@ public partial class Dashboard : Window {
     
 
     public void Open() {
+        if (WindowState == WindowState.Minimized)
+            WindowState = WindowState.Normal;
+        
         if (IsVisible)
             Activate();
         else

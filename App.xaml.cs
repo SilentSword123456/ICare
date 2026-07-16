@@ -44,7 +44,8 @@ public partial class App : Application {
     }
 
     public UpdateInfo? PendingUpdate;
-    
+
+    public EventWaitHandle OpenDashboardEvent;
     
     [STAThread]
     public static void Main(string[] args) {
@@ -90,8 +91,9 @@ public partial class App : Application {
 
     protected override void OnStartup(StartupEventArgs e) {
         _mutex = new Mutex(true, AppInfo.Name, out bool isNew);
+        OpenDashboardEvent = new EventWaitHandle(false, EventResetMode.AutoReset, AppInfo.Name + "_OpenDashboardEvent");
         if (!isNew) {
-            MessageBox.Show($"{AppInfo.Name} is already running. Check the system tray.");
+            OpenDashboardEvent.Set();
             Shutdown();
             return;
         }
@@ -141,6 +143,15 @@ public partial class App : Application {
         
         dashboard.Open();
         UpdateTitleBarTheme(dashboard, config.Theme ==  Theme.Dark);
+        
+        Task.Run(() => {
+            while (true) {
+                var triggerd = WaitHandle.WaitAny([OpenDashboardEvent, _cts.Token.WaitHandle]);
+                if (triggerd == 1)
+                    return;
+                this.Dispatcher.Invoke(dashboard.Open);
+            }
+        });
         
         Application.Current.MainWindow = dashboard;
         sessionMonitor = new SessionMonitor(Application.Current.MainWindow, appTimer);
