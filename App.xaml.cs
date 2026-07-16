@@ -55,11 +55,26 @@ public partial class App : Application {
     }
     
     public App() {
+        #if DEBUG
+            var testLocator = new TestVelopackLocator(
+                appId: "ICare",
+                version: "1.0.0",
+                packagesDir: Path.Combine(Path.GetTempPath(), "ICareTestPackages"));
+
+            updateManager = new UpdateManager(
+                new SimpleFileSource(new DirectoryInfo(@"C:\Users\SilentSword\ICareTestUpdates")),
+                null,
+                testLocator);
+        #else
+            updateManager = new UpdateManager(new GithubSource("https://github.com/SilentSword123456/ICare", null, false));
+        #endif
+        
         DispatcherUnhandledException += App_DispatcherUnhandledException;
         SentrySdk.Init(o =>
         {
             o.Dsn = "https://d745c29ea1a403c15ce7348fd13a4c6c@o4511711865536512.ingest.de.sentry.io/4511711891292240";
-
+            o.Release = $"ICare@{Version}";
+                
         #if DEBUG
             o.Environment = "development";
             o.Debug = true;
@@ -89,20 +104,6 @@ public partial class App : Application {
         dashboard = new Dashboard(config, appTimer, keyboard);
         paletteHelper = new PaletteHelper();
         theme = paletteHelper.GetTheme();
-        
-        #if DEBUG
-                var testLocator = new TestVelopackLocator(
-                    appId: "ICare",
-                    version: "1.0.0",
-                    packagesDir: Path.Combine(Path.GetTempPath(), "ICareTestPackages"));
-
-                updateManager = new UpdateManager(
-                    new SimpleFileSource(new DirectoryInfo(@"C:\Users\SilentSword\ICareTestUpdates")),
-                    null,
-                    testLocator);
-        #else
-                updateManager = new UpdateManager(new GithubSource("https://github.com/SilentSword123456/ICare", null, false));
-        #endif
 
         var helperWindow = new Window();
         helperWindow.Width = 0;
