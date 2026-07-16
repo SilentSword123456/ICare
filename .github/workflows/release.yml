@@ -87,3 +87,13 @@ jobs:
           --releaseName "ICare ${{ steps.get-version.outputs.version }}"
           --tag ${{ github.ref_name }}
           --token ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Sentry release
+        uses: getsentry/action-release@v3
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+        with:
+          version: "ICare@${{ steps.get-version.outputs.version }}"
+          set_commits: auto
