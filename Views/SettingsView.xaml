@@ -29,7 +29,7 @@
             <TextBlock
                 x:Name="Version"
                 HorizontalAlignment="Left"
-                VerticalAlignment="Center"
+                VerticalAlignment="Bottom"
                 Text="v1.0.0"
                 Padding="6,2"
                 FontSize="12"
