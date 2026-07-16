@@ -58,8 +58,7 @@ public partial class SettingsView : UserControl {
         ((App)Application.Current).UpdateStateChanged += UpdateUpdateState;
         dotsTimer.Interval = new TimeSpan(0, 0, 0, 0, 750);
 
-        Version.Text = AppInfo.Version.ToString();
-        Console.WriteLine(AppInfo.Version.ToString());
+        Version.Text = "v" + AppInfo.Version.ToString(3);
     }
 
     private void WorkBox_TextChanged(object sender, TextChangedEventArgs e) {

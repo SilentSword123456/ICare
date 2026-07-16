@@ -31,6 +31,8 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
                 Text="v1.0.0"
+                Padding="6,2"
+                FontSize="12"
                 Foreground="{DynamicResource TextSecondaryBrush}" />
         </Grid>
         <Grid HorizontalAlignment="Center">
