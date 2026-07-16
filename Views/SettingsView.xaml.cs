@@ -62,7 +62,7 @@ public partial class SettingsView : UserControl {
     }
 
     private void WorkBox_TextChanged(object sender, TextChangedEventArgs e) {
-        if (int.TryParse(WorkBox.Text, out int val) && val > 0) {
+        if (int.TryParse(WorkBox.Text, out int val) && val is > 0 and < 100_000) {
             var newSec = val * 60;
             if (config.WorkSec == newSec)
                 return;
@@ -73,7 +73,7 @@ public partial class SettingsView : UserControl {
     }
 
     private void BreakBox_TextChanged(object sender, TextChangedEventArgs e) {
-        if (int.TryParse(BreakBox.Text, out int val) && val > 0) {
+        if (int.TryParse(BreakBox.Text, out int val) && val is > 0 and < 100_000) {
             config.BreakSec = val;
             RecalculateWarningIcon();
         }

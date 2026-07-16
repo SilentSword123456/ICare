@@ -9,6 +9,8 @@ public class Config {
     public int WorkSec {
         get => _workSec;
         set {
+            if (value < 0)
+                return;
             _workSec = value;
             Save();
         }
@@ -19,6 +21,8 @@ public class Config {
     public int BreakSec {
         get => _breakSec;
         set {
+            if (value < 0)
+                return;
             _breakSec = value;
             Save();
         }
