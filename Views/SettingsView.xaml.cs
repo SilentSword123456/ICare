@@ -36,7 +36,7 @@ public partial class SettingsView : UserControl {
         BreakBox.Text = $"{config.BreakSec}";
         RecalculateWarningIcon();
         HotkeyBox.Text = System.Windows.Input.KeyInterop.KeyFromVirtualKey((int)config.HotkeyVK).ToString();
-        AutoStartToggle.IsChecked = StartupManager.IsEnabled();
+        AutoStartToggle.IsChecked = StartupManager.IsApproved();
         //BreakMessage.Text = config.BreakMessage;
         ThemePillButton.IsChecked = config.Theme == Theme.Dark;
         if (((App)Application.Current).IsPortable) {
