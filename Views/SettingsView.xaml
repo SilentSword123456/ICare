@@ -125,6 +125,13 @@
                                   Checked="AutoStartToggle_Checked"
                                   Unchecked="AutoStartToggle_Unchecked" />
                     <!-- TODO: make it be a closed/opened eye instead of a simple toggle -->
+                    <TextBlock  x:Name = "WindowsAutoStartWarningLabel"
+                                Text="Disabled by Windows" 
+                                Foreground="DarkOrange" 
+                                FontSize="10"
+                                VerticalAlignment="Center" 
+                                Margin="10,0,0,0" />
+
                 </StackPanel>
             </StackPanel>
 

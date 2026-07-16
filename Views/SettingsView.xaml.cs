@@ -26,6 +26,7 @@ public partial class SettingsView : UserControl {
     private DispatcherTimer dotsTimer = new DispatcherTimer();
     private string dotsBaseText;
     private int dotsCount;
+    private AutostartWatcher Watcher;
 
     public SettingsView(Config config, Action restartTimer, Action reloadHotkey) {
         this.config = config;
@@ -36,7 +37,11 @@ public partial class SettingsView : UserControl {
         BreakBox.Text = $"{config.BreakSec}";
         RecalculateWarningIcon();
         HotkeyBox.Text = System.Windows.Input.KeyInterop.KeyFromVirtualKey((int)config.HotkeyVK).ToString();
-        AutoStartToggle.IsChecked = StartupManager.IsApproved();
+        Watcher = new AutostartWatcher();
+        Watcher.Start();
+        Watcher.AppActiveChanged += () => this.Dispatcher.Invoke(UpdateAutomaticStartWindowsWarning);
+        UpdateAutomaticStartWindowsWarning();
+        AutoStartToggle.IsChecked = StartupManager.IsInRun();
         //BreakMessage.Text = config.BreakMessage;
         ThemePillButton.IsChecked = config.Theme == Theme.Dark;
         if (((App)Application.Current).IsPortable) {
@@ -104,11 +109,15 @@ public partial class SettingsView : UserControl {
     private void AutoStartToggle_Checked(object sender, RoutedEventArgs e) {
         StartupManager.Enable();
         UpdateToggleVisual(AutoStartToggle);
+        Watcher.Start();
+        UpdateAutomaticStartWindowsWarning();
     }
 
     private void AutoStartToggle_Unchecked(object sender, RoutedEventArgs e) {
         StartupManager.Disable();
         UpdateToggleVisual(AutoStartToggle);
+        Watcher.Stop();
+        UpdateAutomaticStartWindowsWarning();
     }
 
     private void UpdateToggleVisual(ToggleButton toggle) {
@@ -243,5 +252,13 @@ public partial class SettingsView : UserControl {
     private void AnimateDots(object? sender, EventArgs eventArgs) {
         dotsCount = (dotsCount + 1) % 4;
         UpdateButtonText.Text = ("[" + dotsBaseText + new string('.', dotsCount) + "]").ToString();
+    }
+
+    private void UpdateAutomaticStartWindowsWarning() {
+
+        if (StartupManager.IsInRun() && !StartupManager.IsApproved())
+            WindowsAutoStartWarningLabel.Text = "Disabled by Windows";
+        else
+            WindowsAutoStartWarningLabel.Text = "";
     }
 }
