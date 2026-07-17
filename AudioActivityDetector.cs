@@ -5,14 +5,21 @@ namespace ICare;
 
 public class AudioActivityDetector {
     private MMDeviceEnumerator enumerator;
-    private MMDevice device;
+    private MMDevice renderDevice;
+    private MMDevice captureDevice;
 
     public AudioActivityDetector() {
         enumerator = new MMDeviceEnumerator();
-        device = enumerator.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
+        renderDevice = enumerator.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
+        captureDevice = enumerator.GetDefaultAudioEndpoint(DataFlow.Capture, Role.Multimedia);
     }
     
-    public bool IsAudioPlaying() {
+    public bool IsAudioPlaying() => IsDeviceActive(renderDevice);
+    
+
+    public bool IsMicrophoneInUse() => IsDeviceActive(captureDevice);
+
+    private bool IsDeviceActive(MMDevice device) {
         var sessions = device.AudioSessionManager.Sessions;
 
         for (int i = 0; i < sessions.Count; i++) {
