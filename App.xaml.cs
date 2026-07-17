@@ -201,8 +201,13 @@ public partial class App : Application {
 
     public async Task CheckForUpdates() {
         UpdateState = UpdateState.Checking;
-        PendingUpdate = await updateManager.CheckForUpdatesAsync();
-        UpdateState = PendingUpdate != null ? UpdateState.Available : UpdateState.NotFound;
+        try {
+            PendingUpdate = await updateManager.CheckForUpdatesAsync();
+            UpdateState = PendingUpdate != null ? UpdateState.Available : UpdateState.NotFound;
+        } catch (Exception ex) {
+            SentrySdk.CaptureException(ex);
+            UpdateState = UpdateState.NotFound;
+        }
     }
     
     public async Task DownloadUpdate() {
