@@ -13,6 +13,7 @@ public class SessionMonitor {
     private bool isPowerSuspended = false;
     private bool isDisplayOff = false;
     private DispatcherTimer dispatcher;
+    private AudioActivityDetector audioDetector;
     
     [StructLayout(LayoutKind.Sequential)]
     private struct POWERBROADCAST_SETTING {
@@ -40,6 +41,8 @@ public class SessionMonitor {
         var guid = GUID_CONSOLE_DISPLAY_STATE;
         RegisterPowerSettingNotification(new WindowInteropHelper(window).Handle, ref guid, 0);
 
+        audioDetector = new();
+        
         dispatcher = new DispatcherTimer();
         dispatcher.Interval = TimeSpan.FromSeconds(1);
         dispatcher.Tick += ManageLastAction;
@@ -48,11 +51,15 @@ public class SessionMonitor {
 
     private void ManageLastAction(object? sender, EventArgs eventArgs) {
         var lastActionTime = IdleTimeDetector.GetIdleTime();
-        if (lastActionTime.TotalSeconds >= 120 && !isPowerSuspended && !isDisplayOff && !isSessionLocked && !timer.IsPaused()) {
+        
+        bool isAudioPlaying = audioDetector.IsAudioPlaying();
+        
+        if (lastActionTime.TotalSeconds >= 120 && !isAudioPlaying && !timer.IsPaused()
+            && !isPowerSuspended && !isDisplayOff && !isSessionLocked) {
             timer.Pause();
             timer.AddTimeBack(lastActionTime);
         }
-        else if (lastActionTime.TotalSeconds < 120 && timer.IsPaused() && !isPowerSuspended && !isDisplayOff && !isSessionLocked) {
+        else if (lastActionTime.TotalSeconds < 120  && timer.IsPaused() && !isPowerSuspended && !isDisplayOff && !isSessionLocked) {
             timer.Resume();
         }
     }
