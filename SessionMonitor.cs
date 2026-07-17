@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
+using System.Windows.Threading;
 using Microsoft.Win32;
 
 namespace ICare;
@@ -11,6 +12,7 @@ public class SessionMonitor {
     private bool isSessionLocked = false;
     private bool isPowerSuspended = false;
     private bool isDisplayOff = false;
+    private DispatcherTimer dispatcher;
     
     [StructLayout(LayoutKind.Sequential)]
     private struct POWERBROADCAST_SETTING {
@@ -37,11 +39,28 @@ public class SessionMonitor {
 
         var guid = GUID_CONSOLE_DISPLAY_STATE;
         RegisterPowerSettingNotification(new WindowInteropHelper(window).Handle, ref guid, 0);
+
+        dispatcher = new DispatcherTimer();
+        dispatcher.Interval = TimeSpan.FromSeconds(1);
+        dispatcher.Tick += ManageLastAction;
+        dispatcher.Start();
+    }
+
+    private void ManageLastAction(object? sender, EventArgs eventArgs) {
+        var lastActionTime = IdleTimeDetector.GetIdleTime();
+        if (lastActionTime.TotalSeconds >= 120 && !isPowerSuspended && !isDisplayOff && !isSessionLocked && !timer.IsPaused()) {
+            timer.Pause();
+            timer.AddTimeBack(lastActionTime);
+        }
+        else if (lastActionTime.TotalSeconds < 120 && timer.IsPaused() && !isPowerSuspended && !isDisplayOff && !isSessionLocked) {
+            timer.Resume();
+        }
     }
 
     public void Stop() {
         SystemEvents.SessionSwitch -= OnSessionSwitch;
         SystemEvents.PowerModeChanged -= OnPowerModeChanged;
+        dispatcher.Stop();
     } 
 
     private void OnSessionSwitch(object sender, SessionSwitchEventArgs e) {

@@ -4,7 +4,6 @@ using System.Windows;
 using System.Windows.Interop;
 using Microsoft.Toolkit.Uwp.Notifications;
 using Application = System.Windows.Application;
-using MessageBox = System.Windows.Forms.MessageBox;
 using System.Windows.Threading;
 using ICare.Models;
 using MaterialDesignThemes.Wpf;
@@ -126,10 +125,10 @@ public partial class App : Application {
                     appTimer.SkipNextBreak();
                     break;
                 case "snooze5":
-                    appTimer.SnoozeBreak(5);
+                    appTimer.SnoozeBreak(TimeSpan.FromSeconds(5));
                     break;
                 case "snooze10":
-                    appTimer.SnoozeBreak(10);
+                    appTimer.SnoozeBreak(TimeSpan.FromSeconds(10));
                     break;
             }
         };

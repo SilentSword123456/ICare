@@ -12,9 +12,10 @@ public class Timer {
     private readonly Stopwatch workStopwatch;
     private readonly Stopwatch breakStopwatch;
     private Boolean isPaused;
+    private TimeSpan workTimeModifier;
 
-    public TimeSpan Remaining => currentWorkTime - workStopwatch.Elapsed > TimeSpan.Zero
-        ? currentWorkTime - workStopwatch.Elapsed
+    public TimeSpan Remaining => currentWorkTime - (workStopwatch.Elapsed - workTimeModifier) > TimeSpan.Zero
+        ? currentWorkTime - (workStopwatch.Elapsed - workTimeModifier)
         : TimeSpan.Zero;
 
     public Timer(Config config, Keyboard keyboard) {
@@ -32,6 +33,7 @@ public class Timer {
             currentWorkTime = TimeSpan.FromSeconds(config.WorkSec);
             SkipNext = false;
             isPaused = false;
+            workTimeModifier = TimeSpan.Zero;
             workStopwatch.Restart();
 
             try {
@@ -110,8 +112,15 @@ public class Timer {
 
     public void Stop() => globalCts.Cancel();
 
-    public void SnoozeBreak(int minutes) {
-        currentWorkTime += TimeSpan.FromMinutes(minutes);
+    public void SnoozeBreak(TimeSpan time) {
+        currentWorkTime += time;
         cycleCts?.Cancel();
     }
+    
+    public void AddTimeBack(TimeSpan time) {
+        workTimeModifier += time;
+        cycleCts?.Cancel();
+    }
+    
+    public bool IsPaused() => isPaused;
 }
