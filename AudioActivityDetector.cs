@@ -24,8 +24,11 @@ public class AudioActivityDetector {
 
         for (int i = 0; i < sessions.Count; i++) {
             var session = sessions[i];
-            if (session.State == AudioSessionState.AudioSessionStateActive && (session.AudioMeterInformation.MasterPeakValue > 0.0001f && checkVolume))
+            if (session.State == AudioSessionState.AudioSessionStateActive) {
+                if (checkVolume)
+                    return session.AudioMeterInformation.MasterPeakValue > 0.0001f;
                 return true;
+            }
         }
         return false;
     }

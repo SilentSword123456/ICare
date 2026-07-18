@@ -59,7 +59,6 @@ public class Timer {
 
 
                     try {
-                        Console.WriteLine("Waiting for " + waitTime.TotalSeconds + " seconds");
                         await Task.Delay(waitTime, cycleCts.Token);
                     }
                     catch (TaskCanceledException) {
@@ -76,13 +75,11 @@ public class Timer {
                     remaining = Remaining;
 
                     if (remaining <= TimeSpan.FromSeconds(60) && remaining != TimeSpan.Zero && !(isInMeeting && remaining <= TimeSpan.FromSeconds(10)) && !SkipNext) {
-                        Console.WriteLine("Sending  break notification at " + remaining.TotalSeconds + " seconds left");
                         Notifier.SendWarning();
                         continue;
                     }
                     
                     if (!SkipNext && isInMeeting && remaining >= TimeSpan.FromSeconds(1) && remaining <= TimeSpan.FromSeconds(10)) {
-                        Console.WriteLine("Starting break warning with " + remaining.TotalSeconds + " seconds left");
                         await breakOverlayWarning.StartBreakWarning(TimeSpan.FromSeconds(10), globalToken);
                         continue;
                     }
@@ -93,11 +90,8 @@ public class Timer {
                     break;
                 }
                 
-                Console.WriteLine("Exited timer loop, checking if we should trigger the break");
-                if(!SkipNext) {
-                    Console.WriteLine("Triggering break");
+                if(!SkipNext)
                     await BlackoutWindow.TriggerBreak(keyboard, config);
-                }
             }
             catch (TaskCanceledException) {
                 break;
