@@ -36,7 +36,7 @@ public partial class SettingsView : UserControl {
         WorkBox.Text = $"{config.WorkSec / 60}";
         BreakBox.Text = $"{config.BreakSec}";
         RecalculateWarningIcon();
-        HotkeyBox.Text = System.Windows.Input.KeyInterop.KeyFromVirtualKey((int)config.HotkeyVK).ToString();
+        HotkeyBox.Text = System.Windows.Input.KeyInterop.KeyFromVirtualKey((int)config.HotkeyVk).ToString();
         Watcher = new AutostartWatcher();
         Watcher.Start();
         Watcher.AppActiveChanged += () => this.Dispatcher.Invoke(UpdateAutomaticStartWindowsWarning);
@@ -56,7 +56,7 @@ public partial class SettingsView : UserControl {
         DataObject.AddPastingHandler(BreakBox, OnPaste);
         
         ((App)Application.Current).UpdateStateChanged += UpdateUpdateState;
-        dotsTimer.Interval = new TimeSpan(0, 0, 0, 0, 750);
+        dotsTimer.Interval = TimeSpan.FromMilliseconds(750);
 
         Version.Text = "v" + AppInfo.Version.ToString(3);
     }
@@ -101,7 +101,7 @@ public partial class SettingsView : UserControl {
         if (key < System.Windows.Input.Key.A || key > System.Windows.Input.Key.Z)
             return;
 
-        config.HotkeyVK = (uint)System.Windows.Input.KeyInterop.VirtualKeyFromKey(key);
+        config.HotkeyVk = (uint)System.Windows.Input.KeyInterop.VirtualKeyFromKey(key);
         HotkeyBox.Text = key.ToString();
         reloadHotkey();
     }
@@ -178,7 +178,7 @@ public partial class SettingsView : UserControl {
             RecalculateWarningIcon();
             StartupManager.Disable();
             AutoStartToggle.IsChecked = false;
-            HotkeyBox.Text = System.Windows.Input.KeyInterop.KeyFromVirtualKey((int)config.HotkeyVK).ToString();
+            HotkeyBox.Text = System.Windows.Input.KeyInterop.KeyFromVirtualKey((int)config.HotkeyVk).ToString();
             //BreakMessage.Text = config.BreakMessage;
             ThemePillButton.IsChecked = config.Theme == Theme.Dark;
 

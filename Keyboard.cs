@@ -37,13 +37,13 @@ public class Keyboard : IDisposable {
     private bool _blockInput = false;
     private Config config;
 
-    public Keyboard(Config _config) {
+    public Keyboard(Config config) {
         _proc = HookCallback;
         using var curProcess = Process.GetCurrentProcess();
         using var curModule = curProcess.MainModule!;
         _hookId = SetWindowsHookEx(13, _proc, GetModuleHandle(curModule.ModuleName!), 0);
-        config = _config;
-        VK_Q = config.HotkeyVK;
+        this.config = config;
+        VK_Q = config.HotkeyVk;
     }
 
     public void StartBlocking() => _blockInput = true;
@@ -62,7 +62,7 @@ public class Keyboard : IDisposable {
 
     public void ReloadHotkey() {
         UnregisterHotKey(_windowHandle, HOTKEY_ID);
-        VK_Q = config.HotkeyVK;
+        VK_Q = config.HotkeyVk;
         RegisterHotKey(_windowHandle, HOTKEY_ID, MOD_CONTROL | MOD_SHIFT, VK_Q);
     }
 

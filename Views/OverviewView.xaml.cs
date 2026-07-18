@@ -26,7 +26,7 @@ public partial class OverviewView : UserControl {
     }
 
     private void UpdateUI() {
-        var remaining = timer.Remaining;
+        var remaining = timer.Remaining + TimeSpan.FromSeconds(1);
 
         CountdownLabel.Text = $"{(int)remaining.TotalMinutes}:{remaining.Seconds:D2}";
         if (timer.SkipNext == true) {

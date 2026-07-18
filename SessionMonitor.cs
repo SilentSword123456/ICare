@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Threading;
@@ -28,9 +27,10 @@ public class SessionMonitor {
     private static extern IntPtr RegisterPowerSettingNotification(IntPtr hRecipient, ref Guid PowerSettingGuid, int Flags);
 
 
-    public SessionMonitor(Window window, Timer timer) {
+    public SessionMonitor(Window window, Timer timer, AudioActivityDetector audioDetector) {
         ArgumentNullException.ThrowIfNull(window);
         
+        this.audioDetector = audioDetector;
         this.timer = timer;
         SystemEvents.SessionSwitch += OnSessionSwitch;
         SystemEvents.PowerModeChanged += OnPowerModeChanged;
@@ -40,8 +40,6 @@ public class SessionMonitor {
 
         var guid = GUID_CONSOLE_DISPLAY_STATE;
         RegisterPowerSettingNotification(new WindowInteropHelper(window).Handle, ref guid, 0);
-
-        audioDetector = new();
         
         dispatcher = new DispatcherTimer();
         dispatcher.Interval = TimeSpan.FromSeconds(1);

@@ -6,6 +6,7 @@ using Microsoft.Toolkit.Uwp.Notifications;
 using Application = System.Windows.Application;
 using System.Windows.Threading;
 using ICare.Models;
+using ICare.Views;
 using MaterialDesignThemes.Wpf;
 using Velopack;
 using Velopack.Sources;
@@ -28,6 +29,8 @@ public partial class App : Application {
     private MaterialDesignThemes.Wpf.Theme theme;
     private ResourceDictionary currentThemeDictionary;
     private UpdateManager updateManager;
+    private MeetingTracker meetingTracker;
+    private AudioActivityDetector audioDetector;
     
     public bool IsPortable => updateManager.IsPortable;
     public SemanticVersion? Version => updateManager.CurrentVersion;
@@ -101,7 +104,9 @@ public partial class App : Application {
         config = new Config();
         config.Load();
         keyboard = new Keyboard(config);
-        appTimer = new Timer(config, keyboard);
+        audioDetector = new AudioActivityDetector();
+        meetingTracker = new MeetingTracker(audioDetector);
+        appTimer = new Timer(config, keyboard, meetingTracker);
         dashboard = new Dashboard(config, appTimer, keyboard);
         paletteHelper = new PaletteHelper();
         theme = paletteHelper.GetTheme();
@@ -125,10 +130,10 @@ public partial class App : Application {
                     appTimer.SkipNextBreak();
                     break;
                 case "snooze5":
-                    appTimer.SnoozeBreak(TimeSpan.FromSeconds(5));
+                    appTimer.SnoozeBreak(TimeSpan.FromMinutes(5));
                     break;
                 case "snooze10":
-                    appTimer.SnoozeBreak(TimeSpan.FromSeconds(10));
+                    appTimer.SnoozeBreak(TimeSpan.FromMinutes(10));
                     break;
             }
         };
@@ -153,7 +158,7 @@ public partial class App : Application {
         });
         
         Application.Current.MainWindow = dashboard;
-        sessionMonitor = new SessionMonitor(Application.Current.MainWindow, appTimer);
+        sessionMonitor = new SessionMonitor(Application.Current.MainWindow, appTimer, audioDetector);
 
         _ = CheckForUpdates();
     }

@@ -14,17 +14,17 @@ public class AudioActivityDetector {
         captureDevice = enumerator.GetDefaultAudioEndpoint(DataFlow.Capture, Role.Multimedia);
     }
     
-    public bool IsAudioPlaying() => IsDeviceActive(renderDevice);
+    public bool IsAudioPlaying() => IsDeviceActive(renderDevice, true);
     
 
-    public bool IsMicrophoneInUse() => IsDeviceActive(captureDevice);
+    public bool IsMicrophoneInUse() => IsDeviceActive(captureDevice, false);
 
-    private bool IsDeviceActive(MMDevice device) {
+    private bool IsDeviceActive(MMDevice device, bool checkVolume) {
         var sessions = device.AudioSessionManager.Sessions;
 
         for (int i = 0; i < sessions.Count; i++) {
             var session = sessions[i];
-            if (session.State == AudioSessionState.AudioSessionStateActive && session.AudioMeterInformation.MasterPeakValue > 0.0001f)
+            if (session.State == AudioSessionState.AudioSessionStateActive && (session.AudioMeterInformation.MasterPeakValue > 0.0001f && checkVolume))
                 return true;
         }
         return false;

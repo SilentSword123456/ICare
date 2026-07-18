@@ -30,7 +30,7 @@ public class Config {
 
     private uint _hotkeyVk;
 
-    public uint HotkeyVK {
+    public uint HotkeyVk {
         get => _hotkeyVk;
         set {
             _hotkeyVk = value;
@@ -97,7 +97,7 @@ public class Config {
     public void ResetToDefault() {
         WorkSec = 20 * 60;
         BreakSec = 20;
-        HotkeyVK = 0x51;
+        HotkeyVk = 0x51;
         BreakStatSec = 0;
         BreakMessage = "Time to rest your eyes";
         TimesSkipped = 0;
@@ -116,7 +116,7 @@ public class Config {
             var loaded = JsonSerializer.Deserialize<Config>(data);
             _workSec = loaded.WorkSec;
             _breakSec = loaded.BreakSec;
-            _hotkeyVk = loaded.HotkeyVK;
+            _hotkeyVk = loaded.HotkeyVk;
             _breakStatSec = loaded.BreakStatSec;
             _breakMessage = loaded.BreakMessage;
             _timesSkipped = loaded.TimesSkipped;
