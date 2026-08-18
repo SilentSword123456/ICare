@@ -32,6 +32,7 @@ public partial class Dashboard : Window {
         NavigateTo(new OverviewView(config, timer));
         NavOverview.Style = (Style)FindResource("NavButtonActive");
         NavSettings.Style = (Style)FindResource("NavButton");
+        AllowedApps.Style = (Style)FindResource("NavButton");
     }
 
     private void NavSettings_Click(object sender, RoutedEventArgs e) {
@@ -39,6 +40,16 @@ public partial class Dashboard : Window {
             return;
         NavigateTo(new SettingsView(config, timer.Restart, keyboard.ReloadHotkey));
         NavSettings.Style = (Style)FindResource("NavButtonActive");
+        NavOverview.Style = (Style)FindResource("NavButton");
+        AllowedApps.Style = (Style)FindResource("NavButton");
+    }
+    
+    private void AllowedApps_OnClick(object sender, RoutedEventArgs e) {
+        if (ContentArea.Content is AppsView appsView)
+            return;
+        NavigateTo(new AppsView());
+        AllowedApps.Style = (Style)FindResource("NavButtonActive");
+        NavSettings.Style = (Style)FindResource("NavButton");
         NavOverview.Style = (Style)FindResource("NavButton");
     }
 
