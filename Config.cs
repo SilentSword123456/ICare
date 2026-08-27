@@ -12,7 +12,9 @@ public class Config {
             if (value < 0)
                 return;
             _workSec = value;
-            Save();
+            
+            if(Autosave)
+                Save();
         }
     }
 
@@ -24,7 +26,9 @@ public class Config {
             if (value < 0)
                 return;
             _breakSec = value;
-            Save();
+            
+            if(Autosave)
+                Save();
         }
     }
 
@@ -34,7 +38,9 @@ public class Config {
         get => _hotkeyVk;
         set {
             _hotkeyVk = value;
-            Save();
+            
+            if(Autosave)
+                Save();
         }
     }
 
@@ -44,7 +50,9 @@ public class Config {
         get => _breakStatSec;
         set {
             _breakStatSec = value;
-            Save();
+            
+            if(Autosave)
+                Save();
         }
     }
 
@@ -54,7 +62,9 @@ public class Config {
         get => _breakMessage;
         set {
             _breakMessage = value;
-            Save();
+            
+            if(Autosave)
+                Save();
         }
     }
 
@@ -64,7 +74,9 @@ public class Config {
         get => _timesSkipped;
         set {
             _timesSkipped = value;
-            Save();
+            
+            if(Autosave)
+                Save();
         }
     }
 
@@ -73,9 +85,13 @@ public class Config {
         get => _theme;
         set {
             _theme = value;
-            Save();
+            
+            if(Autosave)
+                Save();
         }
     }
+
+    public bool Autosave = true;
 
     private static string ConfigPath => Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),

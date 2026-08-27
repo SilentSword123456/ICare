@@ -5,30 +5,33 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:ICare.Views"
              mc:Ignorable="d"
-             d:DesignHeight="Infinity" d:DesignWidth="Infinity"
+             SizeToContent="WidthAndHeight"
              WindowStyle="None"
              AllowsTransparency="True"
              Background="Transparent"
              Topmost="True"
-             ShowInTaskbar="False">
+             ShowInTaskbar="False"
+             WindowStartupLocation="Manual">
     
-    <Grid>
-        <TextBlock Foreground="AntiqueWhite" 
-                   FontSize="36"
-                   VerticalAlignment="Top" 
-                   HorizontalAlignment="Center">
-            <Run x:Name="BreakOverlayMessage" Text="We believe you are in a meeting."/>
-            <LineBreak/>
-            <Run Text="Press "/>
-            <Run x:Name="SkipKeyRun" Text="Control+Shift+Q" FontFamily="Consolas" FontWeight="Heavy" Background="DarkSlateGray"/>
-            <Run Text=" if you wish to skip the break"/>
-        </TextBlock>
-        <TextBlock x:Name="CountdownText"
-                   Text="5"
-                   Foreground="White"
-                   FontSize="72"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Top"
-                   Margin="0,150,0,0" />
-    </Grid>
+    <Border Background="#20FFFDD0" CornerRadius="40" Padding="10">
+        <Grid>
+            <TextBlock Foreground="AntiqueWhite" 
+                        FontSize="36"
+                        VerticalAlignment="Top" 
+                        HorizontalAlignment="Center">
+                <Run x:Name="BreakOverlayMessage" Text=" We believe you are in a meeting."/>
+                <LineBreak/>
+                <Run Text="Press "/>
+                <Run x:Name="SkipKeyRun" Text="Control+Shift+Q" FontFamily="Consolas" FontWeight="Heavy" Background="DarkSlateGray"/>
+                <Run Text=" if you wish to skip the break"/>
+            </TextBlock>
+            <TextBlock x:Name="CountdownText"
+                       Text="5"
+                       Foreground="White"
+                       FontSize="72"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Top"
+                       Margin="0,100,0,0" />
+        </Grid>
+    </Border>
 </Window>
