@@ -15,20 +15,20 @@
     <Grid>
         <TextBlock Foreground="AntiqueWhite" 
                    FontSize="36"
-                   VerticalAlignment="Center" 
+                   VerticalAlignment="Top" 
                    HorizontalAlignment="Center">
-            <Run Text="We believe you are in a meeting."/>
+            <Run x:Name="BreakOverlayMessage" Text="We believe you are in a meeting."/>
             <LineBreak/>
             <Run Text="Press "/>
             <Run x:Name="SkipKeyRun" Text="Control+Shift+Q" FontFamily="Consolas" FontWeight="Heavy" Background="DarkSlateGray"/>
-            <Run Text=" to skip the break"/>
+            <Run Text=" if you wish to skip the break"/>
         </TextBlock>
         <TextBlock x:Name="CountdownText"
                    Text="5"
                    Foreground="White"
                    FontSize="72"
                    HorizontalAlignment="Center"
-                   VerticalAlignment="Center"
+                   VerticalAlignment="Top"
                    Margin="0,150,0,0" />
     </Grid>
 </Window>

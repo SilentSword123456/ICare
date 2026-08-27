@@ -38,7 +38,7 @@ public partial class BreakOverlayWindow : Window {
         SkipKeyRun.Text = "Control+Shift+" + KeyInterop.KeyFromVirtualKey((int) config.HotkeyVk).ToString();
     }
 
-    public async Task StartBreakWarning(TimeSpan warningDuration, CancellationToken cts) {
+    public async Task StartBreakWarning(TimeSpan warningDuration, CancellationToken cts, String WarningMessage) {
         this.WarningDuration = warningDuration;
         CountdownText.Text = warningDuration.TotalSeconds.ToString();
         UpdateHotkeyText();
@@ -48,6 +48,8 @@ public partial class BreakOverlayWindow : Window {
         var internalCts = new CancellationTokenSource();
         var linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(internalCts.Token, cts);
         var cancellationTokenTask = Task.Delay(Timeout.Infinite, linkedTokenSource.Token);
+        
+        BreakOverlayMessage.Text = WarningMessage;
         
         Open();
         breakTask.Stop();
