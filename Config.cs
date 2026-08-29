@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System.Collections.ObjectModel;
+using System.IO;
 using System.Text.Json;
+using ICare.Utilities;
 
 namespace ICare;
 
@@ -91,6 +93,17 @@ public class Config {
         }
     }
 
+    private ObservableCollection<AppsFolder> _appsFolders;
+    public ObservableCollection<AppsFolder> AppsFolders {
+        get => _appsFolders;
+        set  {
+            _appsFolders = value;
+            
+            if(Autosave)
+                Save();
+        }
+    }
+
     public bool Autosave = true;
 
     private static string ConfigPath => Path.Combine(
@@ -107,7 +120,20 @@ public class Config {
         _breakMessage = "Time to rest your eyes";
         _timesSkipped = 0;
         _theme = AppInfo.SystemTheme;
+        _appsFolders = new ObservableCollection<AppsFolder>();
+        _appsFolders.CollectionChanged += (s, e) => {
+            if (e.NewItems != null)
+                foreach (AppsFolder folder in e.NewItems)
+                    SubscribeFolder(folder);
+            if (Autosave) 
+                Save();
+        };
         Directory.CreateDirectory(Path.GetDirectoryName(ConfigPath)!);
+    }
+
+    private void SubscribeFolder(AppsFolder folder) {
+        folder.PropertyChanged += (s, e) => { if (Autosave) Save(); };
+        folder.Apps.CollectionChanged += (s, e) => { if (Autosave) Save(); };
     }
 
     public void ResetToDefault() {
@@ -117,6 +143,14 @@ public class Config {
         BreakStatSec = 0;
         BreakMessage = "Time to rest your eyes";
         TimesSkipped = 0;
+        _appsFolders = new ObservableCollection<AppsFolder>();
+        _appsFolders.CollectionChanged += (s, e) => {
+            if (e.NewItems != null)
+                foreach (AppsFolder folder in e.NewItems)
+                    SubscribeFolder(folder);
+            if (Autosave) 
+                Save();
+        };
         Theme = AppInfo.SystemTheme;
     }
 
@@ -137,6 +171,12 @@ public class Config {
             _breakMessage = loaded.BreakMessage;
             _timesSkipped = loaded.TimesSkipped;
             _theme = loaded.Theme;
+            _appsFolders = loaded.AppsFolders;
+            foreach (var folder in _appsFolders) {
+                foreach (var app in folder.Apps)
+                    app.Icon = IconHelper.GetIconForExe(app.ExePath);
+                SubscribeFolder(folder);
+            }
         }
         catch (FileNotFoundException e) {
             Console.WriteLine("Config file not found, trying to generate it!");
@@ -144,16 +184,7 @@ public class Config {
         }
         catch (Exception e) {
             Console.WriteLine($"Unexpected error occurred: {e.Message}");
-            Console.WriteLine($"Trying to regenerate config file...");
-            try {
-                File.Delete(ConfigPath);
-                Save();
-                Console.WriteLine("Config file generated successfully!");
-            }
-            catch (Exception ex) {
-                Console.WriteLine(
-                    $"Unexpected error occurred while trying to regenerate the file. Copy the following message and report the bug on the GitHub repo:\n{ex.Message}");
-            }
+            Console.WriteLine("Config file appears corrupted; leaving it in place for inspection and using in-memory defaults for this session.");
         }
     }
 }

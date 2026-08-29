@@ -11,6 +11,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using ICare.Models;
+using ICare.Utilities;
 using Sentry.Extensibility;
 using UserControl = System.Windows.Controls.UserControl;
 
@@ -20,9 +21,11 @@ public partial class AppsView : UserControl {
     private Process[] AllProcesses;
     public ObservableCollection<InstalledApp> Apps { get; set; } = new();
     private ListCollectionView view;
-    public AppsView() {
+    private AppsFolder folder;
+    public AppsView(AppsFolder folder) {
         InitializeComponent();
         DataContext = this;
+        this.folder = folder;
         
         Task.Run(ListApps);
         
@@ -60,11 +63,11 @@ public partial class AppsView : UserControl {
                 dynamic shortcut = shell.CreateShortcut(file);
                 string targetPath = (string)shortcut.TargetPath;
                 Debug.WriteLine(Path.GetFileNameWithoutExtension(file) + " -> " + targetPath);
-                found.Add(new InstalledApp { Name = Path.GetFileNameWithoutExtension(file), ExePath = shortcut.TargetPath, Icon = GetIconForExe(shortcut.TargetPath) });
+                found.Add(new InstalledApp { Name = Path.GetFileNameWithoutExtension(file), ExePath = shortcut.TargetPath, Icon = IconHelper.GetIconForExe(shortcut.TargetPath) });
                 Dispatcher.Invoke(() =>
                     Apps.Add(new InstalledApp {
                         Name = Path.GetFileNameWithoutExtension(file), ExePath = shortcut.TargetPath,
-                        Icon = GetIconForExe(shortcut.TargetPath)
+                        Icon = IconHelper.GetIconForExe(shortcut.TargetPath)
                     }));
             }
             catch (Exception e) {
@@ -78,21 +81,17 @@ public partial class AppsView : UserControl {
             return;
         view.Refresh();
     }
-    
-    private ImageSource? GetIconForExe(string exePath) {
-        if (string.IsNullOrWhiteSpace(exePath) || !File.Exists(exePath))
-            return null;
 
-        using Icon? icon = Icon.ExtractAssociatedIcon(exePath);
-        if (icon == null)
-            return null;
+    private void ListBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e) {
+        if (e.AddedItems.Count == 0)
+            return;
+        
+        var selected = (InstalledApp)e.AddedItems[0];
+        
+        bool alreadyInFolder = folder.Apps.Any(app => app.ExePath == selected.ExePath);
+        if (!alreadyInFolder)
+            folder.Apps.Add(selected);
 
-        ImageSource imageSource = Imaging.CreateBitmapSourceFromHIcon(
-            icon.Handle,
-            Int32Rect.Empty,
-            BitmapSizeOptions.FromEmptyOptions());
-        imageSource.Freeze();
-
-        return imageSource;
+        ListBox.SelectedItem = null;
     }
 }

@@ -44,14 +44,21 @@ public partial class Dashboard : Window {
         AllowedApps.Style = (Style)FindResource("NavButton");
     }
     
-    private void AllowedApps_OnClick(object sender, RoutedEventArgs e) {
-        if (ContentArea.Content is AppsView appsView)
+    private void AppsFolders_Click(object sender, RoutedEventArgs e) {
+        if (ContentArea.Content is FoldersView foldersView)
             return;
-        NavigateTo(new AppsView());
+        NavigateTo(new FoldersView(OpenFolderView, config));
         AllowedApps.Style = (Style)FindResource("NavButtonActive");
         NavSettings.Style = (Style)FindResource("NavButton");
         NavOverview.Style = (Style)FindResource("NavButton");
     }
+
+    private void OpenFolderView(AppsFolder folder) {
+        NavigateTo(new FolderContentView(folder));
+        AllowedApps.Style = (Style)FindResource("NavButton");
+        NavSettings.Style = (Style)FindResource("NavButton");
+        NavOverview.Style = (Style)FindResource("NavButton");
+    } 
 
     protected override void OnClosing(System.ComponentModel.CancelEventArgs e) {
         e.Cancel = true;

@@ -11,22 +11,24 @@
             <RowDefinition Height="40"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
+        
         <TextBox
             Name="SearchBox"
             Grid.Row="0"
-            TextChanged="SearchBoxTextChanged">
-        </TextBox>
+            TextChanged="SearchBoxTextChanged"/>
         
         <ListBox
             Name="ListBox"
             Grid.Row="1"
             ItemsSource="{Binding Apps}"
-            d:DataContext="{d:DesignInstance Type=design:DesignApps, IsDesignTimeCreatable=True}">
+            d:DataContext="{d:DesignInstance Type=design:DesignApps, IsDesignTimeCreatable=True}"
+            SelectionChanged="ListBox_OnSelectionChanged">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="{Binding Icon}" Width="32" Height="32" Stretch="Uniform"/>
-                        <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                        <Image Source="{Binding Icon}" Width="24" Height="24" Stretch="Uniform"/>
+                        <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Margin="5,0,0,0"
+                                   FontSize="16"/>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>

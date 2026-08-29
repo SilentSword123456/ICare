@@ -30,7 +30,7 @@
                         </StackPanel>
                     </Button>
                     <Button x:Name="AllowedApps"
-                            Click="AllowedApps_OnClick"
+                            Click="AppsFolders_Click"
                             Margin="0,0,0,4"
                             Style="{StaticResource NavButton}">
                         <StackPanel Orientation="Horizontal">

@@ -16,7 +16,9 @@ public class InstalledApp : INotifyPropertyChanged{
         }
     }
     public string ExePath { get; set; }
-    public ImageSource Icon { get; set; }
+    
+    [System.Text.Json.Serialization.JsonIgnore]
+    public ImageSource? Icon { get; set; }
     
     public event PropertyChangedEventHandler PropertyChanged;
     protected void OnPropertyChanged(string propName) =>

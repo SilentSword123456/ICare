@@ -16,7 +16,7 @@ public class FullscreenCheck {
     [DllImport("shell32.dll")]
     static extern int SHQueryUserNotificationState(out UserNotificationState userNotificationState);
 
-    public static bool IsAnAppFullscreen() {
+    public static bool IsAnAppFullscreen() { //TODO make the function also return true if a fullscreen window is opened in another window besides the main one
         UserNotificationState state;
         var returnVal = SHQueryUserNotificationState(out state);
 

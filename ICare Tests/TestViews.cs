@@ -1,4 +1,5 @@
-﻿using System.Windows.Threading;
+﻿using System.Windows;
+using System.Windows.Threading;
 using NUnit.Framework;
 using ICare;
 using ICare.Views;
@@ -6,7 +7,7 @@ using ICare.Views;
 namespace ICare_Tests;
 
 [Apartment(ApartmentState.STA)]
-public class Tests {
+public class TestViews {
     private Config config;
     private BreakOverlayWindow overlay;
     private CancellationTokenSource cts;
@@ -38,6 +39,16 @@ public class Tests {
         Dispatcher.PushFrame(frame);
 
         task.GetAwaiter().GetResult();
+    }
+
+    [Test]
+    public void TestAppsFolderView() {
+        AppsFolder folder =  new AppsFolder();
+        folder.Name = "Games";
+        
+        FolderContentView view = new FolderContentView(folder);
+        var window = new Window { Content = new FolderContentView(folder), Width = 700, Height = 450 };
+        window.ShowDialog();
     }
     
     [TearDown]
