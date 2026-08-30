@@ -28,22 +28,22 @@ public class AppsMonitor {
         AutomationElement focusedElement = sender as AutomationElement;
         
         if (focusedElement != null) {
+        
             int processId = focusedElement.Current.ProcessId;
             using (Process process = Process.GetProcessById(processId)) {
-                Console.WriteLine("Current process is " + process.MainModule.ModuleName + " at " + process.MainModule.FileName);
+                currentlyActiveFolder = null;
+                //Console.WriteLine("Current process is " + process.ProcessName + " at " + process.MainModule.FileName);
                 
                 foreach (var folder in config.AppsFolders) {
-                    Console.WriteLine("<----------------------\nFolder " + folder.Name);
+                    //Console.WriteLine("<----------------------\nFolder " + folder.Name);
                     
                     foreach (var app in folder.Apps) {
-                        if (String.Compare(app.ExePath.ToLower(), process.MainModule.FileName.ToLower(), StringComparison.Ordinal) == 0) {
-                            Console.WriteLine("Current app is the focused app");
-                            Console.WriteLine("The rules for the current folder are:");
-                            Console.WriteLine("Track time: " + folder.TrackTime);
-                            Console.WriteLine("Send notification: " + folder.SendNotification);
-                            Console.WriteLine("Display overlay: " + folder.ShowOverlayWarning);
+                        if (String.Compare(app.ExePath, process.MainModule.FileName, StringComparison.Ordinal) == 0
+                            || string.Equals(app.Name, process.ProcessName, StringComparison.CurrentCultureIgnoreCase)) {
+                            //Console.WriteLine("Current app is the focused app");
                             
                             currentlyActiveFolder = folder;
+                            
                             if(folder.TrackTime == false && timer.IsPaused() == false) {
                                 Console.WriteLine("Pausing timer");
                                 timer.Pause();
@@ -56,17 +56,19 @@ public class AppsMonitor {
                             }
                             
                         }
-                        else {
-                            currentlyActiveFolder = null;
-                            timer.Resume(true);
-                            timer.sendNotification = true;
-                            timer.displayOverlay = true;
-                        }
-                        Console.WriteLine(app.Name + " at " + app.ExePath);
+                        
+                        
+                        //Console.WriteLine(app.Name + " at " + app.ExePath);
                     }
                 }
-                Console.WriteLine("---------------------->");
+                //Console.WriteLine("---------------------->");
                 
+            }
+            
+            if (currentlyActiveFolder == null) {
+                timer.Resume(true);
+                timer.sendNotification = true;
+                timer.displayOverlay = true;
             }
         }
     }

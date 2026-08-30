@@ -13,6 +13,7 @@ public class SessionMonitor {
     private bool isDisplayOff = false;
     private DispatcherTimer dispatcher;
     private AudioActivityDetector audioDetector;
+    private AppsMonitor appsMonitor;
     
     [StructLayout(LayoutKind.Sequential)]
     private struct POWERBROADCAST_SETTING {
@@ -27,11 +28,12 @@ public class SessionMonitor {
     private static extern IntPtr RegisterPowerSettingNotification(IntPtr hRecipient, ref Guid PowerSettingGuid, int Flags);
 
 
-    public SessionMonitor(Window window, Timer timer, AudioActivityDetector audioDetector) {
+    public SessionMonitor(Window window, Timer timer, AudioActivityDetector audioDetector, AppsMonitor appsMonitor) {
         ArgumentNullException.ThrowIfNull(window);
         
         this.audioDetector = audioDetector;
         this.timer = timer;
+        this.appsMonitor = appsMonitor;
         SystemEvents.SessionSwitch += OnSessionSwitch;
         SystemEvents.PowerModeChanged += OnPowerModeChanged;
 
@@ -57,7 +59,9 @@ public class SessionMonitor {
             timer.Pause();
             timer.AddTimeBack(lastActionTime); //TODO do we need this (since timer.Resume() already adds time back)?
         }
-        else if (lastActionTime.TotalSeconds < 120  && timer.IsPaused() && !isPowerSuspended && !isDisplayOff && !isSessionLocked) {
+        else if (lastActionTime.TotalSeconds < 120  && timer.IsPaused()
+                                                    && (appsMonitor.currentlyActiveFolder == null || appsMonitor.currentlyActiveFolder.TrackTime)
+                                                    && !isPowerSuspended && !isDisplayOff && !isSessionLocked) {
             timer.Resume();
         }
     }

@@ -161,7 +161,7 @@ public partial class App : Application {
         });
         
         Application.Current.MainWindow = dashboard;
-        sessionMonitor = new SessionMonitor(Application.Current.MainWindow, appTimer, audioDetector);
+        sessionMonitor = new SessionMonitor(Application.Current.MainWindow, appTimer, audioDetector, appsMonitor);
 
         _ = CheckForUpdates();
     }
