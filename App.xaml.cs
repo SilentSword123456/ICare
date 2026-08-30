@@ -31,6 +31,7 @@ public partial class App : Application {
     private UpdateManager updateManager;
     private MeetingTracker meetingTracker;
     private AudioActivityDetector audioDetector;
+    private AppsMonitor appsMonitor;
     
     public bool IsPortable => updateManager.IsPortable;
     public SemanticVersion? Version => updateManager.CurrentVersion;
@@ -107,6 +108,8 @@ public partial class App : Application {
         audioDetector = new AudioActivityDetector();
         meetingTracker = new MeetingTracker(audioDetector);
         appTimer = new Timer(config, keyboard, meetingTracker);
+        appsMonitor = new AppsMonitor(config, appTimer);
+        appsMonitor.Start();
         dashboard = new Dashboard(config, appTimer, keyboard);
         paletteHelper = new PaletteHelper();
         theme = paletteHelper.GetTheme();
@@ -165,6 +168,7 @@ public partial class App : Application {
 
     public void CloseApp() {
         sessionMonitor.Stop();
+        appsMonitor.Stop();
         _cts.Cancel();
     }
 

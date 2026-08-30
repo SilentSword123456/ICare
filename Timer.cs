@@ -16,7 +16,8 @@ public class Timer {
     private TimeSpan workTimeModifier;
     private BreakOverlayWindow breakOverlayWarning;
     private MeetingTracker meetingTracker;
-    
+    public bool sendNotification = true;
+    public bool displayOverlay = true;
     public TimeSpan Remaining => currentWorkTime - (workStopwatch.Elapsed - workTimeModifier) > TimeSpan.Zero
         ? currentWorkTime - (workStopwatch.Elapsed - workTimeModifier)
         : TimeSpan.Zero;
@@ -49,8 +50,6 @@ public class Timer {
                     cycleCts = CancellationTokenSource.CreateLinkedTokenSource(globalToken);
                     
                     var remaining = Remaining;
-                    
-                    
 
                     TimeSpan waitTime;
                     if (isPaused)
@@ -86,16 +85,16 @@ public class Timer {
                     
                     remaining = Remaining;
 
-                    if (remaining <= TimeSpan.FromSeconds(60) && remaining != TimeSpan.Zero && !((isAnAppFullscreen || isInMeeting) && remaining <= TimeSpan.FromSeconds(10)) && !SkipNext) {
+                    if (sendNotification && remaining <= TimeSpan.FromSeconds(60) && remaining != TimeSpan.Zero && !((isAnAppFullscreen || isInMeeting) && remaining <= TimeSpan.FromSeconds(10)) && !SkipNext) {
                         Notifier.SendWarning();
                         continue;
                     }
                     
-                    if (!SkipNext && isInMeeting && remaining >= TimeSpan.FromSeconds(1) && remaining <= TimeSpan.FromSeconds(10)) {
+                    if (displayOverlay && !SkipNext && isInMeeting && remaining >= TimeSpan.FromSeconds(1) && remaining <= TimeSpan.FromSeconds(10)) {
                         await breakOverlayWarning.StartBreakWarning(TimeSpan.FromSeconds(Math.Round(remaining.TotalSeconds)), globalToken, "We believe you are in a meeting");
                         continue;
                     }
-                    else if (!SkipNext && FullscreenCheck.IsAnAppFullscreen() && remaining >= TimeSpan.FromSeconds(1) && remaining <= TimeSpan.FromSeconds(10)) {
+                    else if (displayOverlay && !SkipNext && FullscreenCheck.IsAnAppFullscreen() && remaining >= TimeSpan.FromSeconds(1) && remaining <= TimeSpan.FromSeconds(10)) {
                         await breakOverlayWarning.StartBreakWarning(TimeSpan.FromSeconds(Math.Round(remaining.TotalSeconds)), globalToken, "You have a fullscreen app currently open");
                         continue;
                     }
@@ -123,12 +122,12 @@ public class Timer {
         breakStopwatch.Restart();
     }
 
-    public void Resume() {
+    public void Resume(bool addTimeBack = true) {
         if (!isPaused) return;
         isPaused = false;
         workStopwatch.Start();
         cycleCts?.Cancel();
-        if (breakStopwatch.Elapsed >= TimeSpan.FromSeconds(config.BreakSec)) {
+        if (addTimeBack && breakStopwatch.Elapsed >= TimeSpan.FromSeconds(config.BreakSec)) {
             breakStopwatch.Stop();
             Restart();
         }

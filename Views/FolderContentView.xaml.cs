@@ -15,7 +15,7 @@ public partial class FolderContentView : UserControl {
         DataContext = folder;
         
         FolderNameText.Text = folder.Name;
-        AppCountText.Text = folder.Apps.Count.ToString();
+        AppCountText.Text = folder.Apps.Count.ToString() + (folder.Apps.Count == 1 ? " app" : " apps");
         TrackTimeCheckbox.IsChecked = folder.TrackTime;
         RuleSendNotificationCheckbox.IsChecked = folder.SendNotification;
         RuleShowOverlayWarningCheckbox.IsChecked = folder.ShowOverlayWarning;
@@ -25,7 +25,8 @@ public partial class FolderContentView : UserControl {
         CloseAddAppsButton.Visibility = Visibility.Collapsed;
         
         AppsListControl.ItemsSource = folder.Apps;
-        folder.Apps.CollectionChanged += (s, e) => AppCountText.Text = folder.Apps.Count.ToString();
+        folder.Apps.CollectionChanged += (s, e) => 
+            AppCountText.Text = folder.Apps.Count.ToString() + (folder.Apps.Count == 1 ? " app" : " apps");
         
         isInitializing = false;
     }

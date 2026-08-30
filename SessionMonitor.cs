@@ -55,7 +55,7 @@ public class SessionMonitor {
         if (lastActionTime.TotalSeconds >= 120 && !isAudioPlaying && !timer.IsPaused()
             && !isPowerSuspended && !isDisplayOff && !isSessionLocked) {
             timer.Pause();
-            timer.AddTimeBack(lastActionTime);
+            timer.AddTimeBack(lastActionTime); //TODO do we need this (since timer.Resume() already adds time back)?
         }
         else if (lastActionTime.TotalSeconds < 120  && timer.IsPaused() && !isPowerSuspended && !isDisplayOff && !isSessionLocked) {
             timer.Resume();

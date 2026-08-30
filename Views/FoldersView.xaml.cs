@@ -21,4 +21,15 @@ public partial class FoldersView : UserControl {
         AppsFolder folder = (AppsFolder)((Button)sender).Tag;
         OpenFolderView(folder);
     }
+
+    private void On_AddFolderButtonClick(object sender, RoutedEventArgs e) {
+        int count = 0;
+        foreach (var folder in Folders) {
+            count++;
+            if (folder.Name.CompareTo(("Folder " + count.ToString())) != 0)
+                break;
+        }
+        
+        Folders.Add(new AppsFolder(){Name=("Folder " + count.ToString()), TrackTime = true, SendNotification = true});
+    }
 }

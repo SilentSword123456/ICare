@@ -1,4 +1,5 @@
-﻿using ICare;
+﻿using System.Windows.Forms;
+using ICare;
 using ICare.Models;
 using Microsoft.Testing.Platform.Extensions.Messages;
 using NUnit.Framework;
@@ -29,7 +30,7 @@ public class Test_Config {
     [Test]
     public void TestAppsFolder() {
         AppsFolder appsFolder = new AppsFolder();
-        appsFolder.Apps.Add(new InstalledApp(){Name = "TEST APP", ExePath = "cmd.exe"});
+        appsFolder.Apps.Add(new InstalledApp(){Name = "Cmd", ExePath = "cmd.exe"});
         appsFolder.Name = "TEST FOLDER";
         appsFolder.ShowOverlayWarning = true;
     
