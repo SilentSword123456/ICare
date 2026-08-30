@@ -11,7 +11,7 @@ public class Test_Config {
     [SetUp]
     public void Setup() {
         config = new Config();
-        config.Autosave = true;
+        config.Autosave = false;
     }
 
     [Test]
