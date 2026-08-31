@@ -68,7 +68,7 @@ public class AppsMonitor {
             if (currentlyActiveFolder == null) {
                 timer.Resume(true);
                 timer.sendNotification = true;
-                timer.displayOverlay = true;
+                timer.displayOverlay = false;
             }
         }
     }
