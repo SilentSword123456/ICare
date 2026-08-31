@@ -17,7 +17,7 @@ public class Timer {
     private BreakOverlayWindow breakOverlayWarning;
     private MeetingTracker meetingTracker;
     public bool sendNotification = true;
-    public bool displayOverlay = true;
+    public bool displayOverlay = false;
     public TimeSpan Remaining => currentWorkTime - (workStopwatch.Elapsed - workTimeModifier) > TimeSpan.Zero
         ? currentWorkTime - (workStopwatch.Elapsed - workTimeModifier)
         : TimeSpan.Zero;
