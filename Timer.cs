@@ -96,7 +96,9 @@ public class Timer {
                         continue;
                     }
                     else if (!SkipNext && FullscreenCheck.IsAnAppFullscreen() && remaining >= TimeSpan.FromSeconds(1) && remaining <= TimeSpan.FromSeconds(10)) {
-                        await breakOverlayWarning.StartBreakWarning(TimeSpan.FromSeconds(Math.Round(remaining.TotalSeconds)), globalToken, "You have a fullscreen app currently open");
+                        var monitorRect = FullscreenCheck.GetFullscreenMonitorRect();
+                        
+                        await breakOverlayWarning.StartBreakWarning(TimeSpan.FromSeconds(Math.Round(remaining.TotalSeconds)), globalToken, "You have a fullscreen app currently open", monitorRect);
                         continue;
                     }
                     else if (!SkipNext && displayOverlay && remaining >= TimeSpan.FromSeconds(1) && remaining <= TimeSpan.FromSeconds(10)) {

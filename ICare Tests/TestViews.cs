@@ -22,11 +22,21 @@ public class TestViews {
         
         SynchronizationContext.SetSynchronizationContext(new DispatcherSynchronizationContext(Dispatcher.CurrentDispatcher));
     }
-
+    
     [Test]
-    public void Debug_FullscreenCheck() {
-        var result = FullscreenCheck.IsAnAppFullscreen();
-        TestContext.WriteLine($"IsAnAppFullscreen: {result}");
+    public async Task Test_FullscreenCheck() {
+        if (!FullscreenCheck.IsAnAppFullscreen())
+            return;
+        var monitorRect = FullscreenCheck.GetFullscreenMonitorRect();
+        
+        var dispatcher = Dispatcher.CurrentDispatcher;
+        var task = overlay.StartBreakWarning(TimeSpan.FromSeconds(10), cts.Token, "TEST - You have a fullscreen app currently open", monitorRect);
+        
+        var frame = new DispatcherFrame();
+        task.ContinueWith(_ => dispatcher.BeginInvoke(() => frame.Continue = false));
+        Dispatcher.PushFrame(frame);
+
+        task.GetAwaiter().GetResult();
     }
 
     [Test]

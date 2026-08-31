@@ -24,7 +24,7 @@ public class TestAppsMonitor {
     
         config.AppsFolders.Add(appsFolder);
         
-        appsMonitor = new AppsMonitor(config);
+        appsMonitor = new AppsMonitor(config, new Timer(config, new Keyboard(config), new MeetingTracker(new AudioActivityDetector())));
         appsMonitor.Start();
     }
 

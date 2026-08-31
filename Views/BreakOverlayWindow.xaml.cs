@@ -42,11 +42,6 @@ public partial class BreakOverlayWindow : Window {
         };
         
         InitializeComponent();
-        Loaded += (s, e) =>
-        {
-            Left = (SystemParameters.PrimaryScreenWidth - ActualWidth) / 2;
-            Top = 40;
-        };
     }
     
      protected override void OnSourceInitialized(EventArgs e) {
@@ -61,7 +56,7 @@ public partial class BreakOverlayWindow : Window {
         SkipKeyRun.Text = "Control+Shift+" + KeyInterop.KeyFromVirtualKey((int) config.HotkeyVk).ToString();
     }
 
-    public async Task StartBreakWarning(TimeSpan warningDuration, CancellationToken cts, String WarningMessage) {
+    public async Task StartBreakWarning(TimeSpan warningDuration, CancellationToken cts, String WarningMessage, FullscreenCheck.RECT? monitorRect = null) {
         this.WarningDuration = warningDuration;
         CountdownText.Text = warningDuration.TotalSeconds.ToString();
         UpdateHotkeyText();
@@ -76,6 +71,7 @@ public partial class BreakOverlayWindow : Window {
         BreakOverlayMessage.Text = WarningMessage;
         
         Open();
+        UpdateOverlayPos(monitorRect);
         breakTask.Stop();
         breakTask.Start();
         
@@ -94,6 +90,17 @@ public partial class BreakOverlayWindow : Window {
         linkedTokenSource.Dispose();
         
         Hide();
+    }
+
+    private void UpdateOverlayPos(FullscreenCheck.RECT? monitorRect) {
+        if (monitorRect == null) {
+            Left = (SystemParameters.PrimaryScreenWidth - ActualWidth) / 2;
+            Top = 40;
+        }
+        else {
+            Left = (monitorRect.Value.Right - monitorRect.Value.Left - ActualWidth)/2 + monitorRect.Value.Left;
+            Top = monitorRect.Value.Top + 40;
+        }
     }
 
     public void StopBreakWarning() {
