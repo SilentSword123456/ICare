@@ -32,7 +32,7 @@ public partial class Dashboard : Window {
         NavigateTo(new OverviewView(config, timer));
         NavOverview.Style = (Style)FindResource("NavButtonActive");
         NavSettings.Style = (Style)FindResource("NavButton");
-        AllowedApps.Style = (Style)FindResource("NavButton");
+        //AllowedApps.Style = (Style)FindResource("NavButton"); //TODO add AllowdApps back
     }
 
     private void NavSettings_Click(object sender, RoutedEventArgs e) {
@@ -41,21 +41,21 @@ public partial class Dashboard : Window {
         NavigateTo(new SettingsView(config, timer.Restart, keyboard.ReloadHotkey));
         NavSettings.Style = (Style)FindResource("NavButtonActive");
         NavOverview.Style = (Style)FindResource("NavButton");
-        AllowedApps.Style = (Style)FindResource("NavButton");
+        //AllowedApps.Style = (Style)FindResource("NavButton");
     }
     
     private void AppsFolders_Click(object sender, RoutedEventArgs e) {
         if (ContentArea.Content is FoldersView foldersView)
             return;
         NavigateTo(new FoldersView(OpenFolderView, config));
-        AllowedApps.Style = (Style)FindResource("NavButtonActive");
+        //AllowedApps.Style = (Style)FindResource("NavButtonActive");
         NavSettings.Style = (Style)FindResource("NavButton");
         NavOverview.Style = (Style)FindResource("NavButton");
     }
 
     private void OpenFolderView(AppsFolder folder) {
         NavigateTo(new FolderContentView(folder));
-        AllowedApps.Style = (Style)FindResource("NavButton");
+        //AllowedApps.Style = (Style)FindResource("NavButton");
         NavSettings.Style = (Style)FindResource("NavButton");
         NavOverview.Style = (Style)FindResource("NavButton");
     } 

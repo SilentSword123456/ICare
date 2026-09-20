@@ -29,6 +29,7 @@
                                                      Margin="0,0,8,0"/>
                         </StackPanel>
                     </Button>
+                    <!-- //TODO Add AllowdApps back
                     <Button x:Name="AllowedApps"
                             Click="AppsFolders_Click"
                             Margin="0,0,0,4"
@@ -40,6 +41,7 @@
                                                      Margin="0,0,8,0"/>
                         </StackPanel>
                     </Button>
+                    -->
                     <Button x:Name="NavSettings"
                             Click="NavSettings_Click"
                             Margin="0,0,0,4"
